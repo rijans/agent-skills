@@ -1,61 +1,63 @@
-# Human Writing
+# Agent Skills
 
-An open Agent Skill for writing natural, specific, human-sounding prose without generic or formulaic writing patterns commonly associated with AI-generated text.
+A collection of portable Agent Skills for AI coding agents, editors, and assistants.
 
-## What it does
+Skills in this repository are designed to be useful across tools that support the open Agent Skills format, while keeping each skill independently installable and maintainable.
 
-- Rewrites existing text while preserving the author's voice.
-- Drafts articles, blogs, documentation, READMEs, tutorials, product copy, release notes, and social posts.
-- Removes generic, repetitive, corporate, and formulaic language.
-- Preserves uncertainty, nuance, personality, and intentional rough edges.
-- Prevents invented personal experiences, opinions, facts, sources, and quotations.
-- Reviews technical documentation for clarity and consistency.
-- Detects formulaic writing patterns without claiming to detect AI authorship.
+## Skills
 
-## Philosophy
+| Skill | Description |
+| --- | --- |
+| [human-writing](skills/human-writing/) | Write and rewrite natural, specific, human-sounding prose while preserving voice, meaning, nuance, and facts. |
 
-Human writing is not defined by random imperfections or a blacklist of forbidden words.
+## Install
 
-The skill focuses on:
-
-**specificity + clarity + voice + natural rhythm + factual discipline**
-
-It does not try to make every sentence casual, quirky, or imperfect. The author's voice and the purpose of the text come first.
-
-## Installation
+Install the collection with the skills CLI:
 
 ```bash
-npx skills add rijans/human-writing
+npx skills add rijans/agent-skills
 ```
 
-## Modes
+To install a specific skill from this repository:
 
-| Mode | Purpose |
-| --- | --- |
-| **Edit** | Improve existing text with the minimum effective changes. |
-| **Draft** | Create new text from a brief without inventing personal experience or unsupported facts. |
-| **Detect** | Identify observable formulaic patterns without claiming to identify AI authorship. |
+```bash
+npx skills add rijans/agent-skills --skill human-writing
+```
 
-## Supported writing
+## Repository structure
 
-Articles, blog posts, documentation, READMEs, tutorials, technical explanations, product copy, release notes, social posts, and other human-facing prose.
+Each skill lives in its own directory under `skills/`:
 
-## Technical documentation
+```text
+skills/
+├── human-writing/
+│   ├── SKILL.md
+│   └── eval.md
+└── <future-skill>/
+    └── SKILL.md
+```
 
-The skill emphasizes factual accuracy, consistent terminology, useful information early, runnable examples, and clear instructional language. Repository conventions take priority when they conflict with generic defaults.
+A skill can also contain supporting `references/`, `scripts/`, or `assets/` when needed.
 
-## Design principles
+## Human Writing
 
-1. **Preserve voice.** Do not flatten distinctive writing into generic polished prose.
-2. **Prefer specificity.** Concrete details are more useful than inflated language.
-3. **Keep natural rhythm.** Sentence length and structure should vary organically.
-4. **Respect uncertainty.** Do not turn qualified claims into confident ones.
-5. **Do not fabricate.** Never invent facts, experiences, sources, quotations, or technical behavior.
-6. **Avoid mechanical anti-AI editing.** A word is not "AI-like" in isolation; context matters.
+The first skill in this collection, `human-writing`, helps agents produce natural prose without flattening the author's voice or relying on mechanical "anti-AI" word replacement.
 
-## Examples
+It supports editing, drafting, and detection of observable formulaic writing patterns. It does not claim to detect AI authorship or invent personal experiences, facts, sources, quotations, or technical behavior.
 
-See the `examples/` directory for small before/after examples covering editing, drafting, and technical documentation.
+See [the skill](skills/human-writing/SKILL.md) and its [examples](examples/human-writing/) for details.
+
+## Adding a skill
+
+Create a new directory under `skills/` containing a valid `SKILL.md`:
+
+```text
+skills/
+└── my-skill/
+    └── SKILL.md
+```
+
+Keep each skill self-contained. Add supporting files inside that skill's directory when they are required.
 
 ## License
 
