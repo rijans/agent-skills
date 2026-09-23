@@ -1,6 +1,6 @@
 ---
 name: human-writing
-description: Write and rewrite natural, human-authored prose while preserving voice, meaning, nuance, and facts. Remove generic, formulaic, or AI-like writing patterns from articles, blogs, documentation, READMEs, tutorials, technical explanations, product copy, release notes, and social posts.
+description: Write and rewrite natural, human-authored prose while preserving voice, meaning, nuance, and facts. Use when drafting, editing, or reviewing articles, blogs, documentation, READMEs, tutorials, technical explanations, product copy, release notes, social posts, or other prose that should sound specific, natural, and non-formulaic.
 ---
 
 # Human Writing
@@ -16,6 +16,7 @@ Improve supplied text with the minimum effective changes.
 - Keep strong original sentences.
 - Fix awkward phrasing, repetition, filler, and formulaic language.
 - Do not unnecessarily restructure the writing.
+- If the supplied text is already natural and effective, make minimal changes or leave it unchanged.
 
 ### Draft
 Create new prose from the user's brief, audience, context, and examples.
@@ -49,6 +50,8 @@ Preserve:
 - Bluntness or informality
 - Appropriate humor or profanity
 - Deliberate rough edges
+
+Do not normalize dialect, regional phrasing, slang, or non-standard grammar unless it reduces clarity or the user asks for a more standardized style.
 
 Never invent:
 
@@ -99,7 +102,7 @@ Watch for:
 - Generic openings such as "In today's rapidly evolving..."
 - "It's important to note..."
 - "Furthermore", "Moreover", "In conclusion"
-- "Groundbreaking", "revolutionary", "seamless", "game-changing"
+- Inflated or generic promotional language such as "groundbreaking", "revolutionary", "seamless", or "game-changing"
 - Empty claims such as "plays a vital role"
 - "Experts agree" or "studies show" without a named source
 - Repeated "not X but Y" contrasts
@@ -109,7 +112,7 @@ Watch for:
 - Excessive em dashes or colons
 - Repetitive punchy sentence patterns
 - Synonym cycling
-- Empty use of words such as "delve", "foster", "leverage", "robust", "multifaceted", "intricate", "pivotal", "tapestry", or "landscape"
+- Empty use of abstract or corporate vocabulary when a concrete word would be clearer
 - Chatbot phrases such as "Of course", "I hope this helps", or "Let me know if..."
 
 Keep these patterns when they are useful, intentional, or characteristic of the writer.
