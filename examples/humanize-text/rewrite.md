@@ -1,0 +1,1 @@
+# Rewrite Example\n\nUse this file for a future humanize-text rewrite example.\n
