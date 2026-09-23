@@ -1,0 +1,1 @@
+# Technical Documentation Example\n\nUse this file for a future humanize-text technical documentation example.\n
