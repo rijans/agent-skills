@@ -8,7 +8,7 @@ Skills in this repository are designed to be useful across tools that support th
 
 | Skill | Description |
 | --- | --- |
-| [human-writing](skills/human-writing/) | Write and rewrite natural, specific, human-sounding prose while preserving voice, meaning, nuance, and facts. |
+| [humanize-text](skills/humanize-text/) | Write and rewrite natural, specific, human-sounding prose while preserving voice, meaning, nuance, and facts. |
 
 ## Install
 
@@ -21,7 +21,7 @@ npx skills add rijans/agent-skills
 To install a specific skill from this repository:
 
 ```bash
-npx skills add rijans/agent-skills --skill human-writing
+npx skills add rijans/agent-skills --skill humanize-text
 ```
 
 ## Repository structure
@@ -30,7 +30,7 @@ Each skill lives in its own directory under `skills/`:
 
 ```text
 skills/
-├── human-writing/
+├── humanize-text/
 │   ├── SKILL.md
 │   └── eval.md
 └── <future-skill>/
@@ -39,13 +39,13 @@ skills/
 
 A skill can also contain supporting `references/`, `scripts/`, or `assets/` when needed.
 
-## Human Writing
+## Humanize Text
 
-The first skill in this collection, `human-writing`, helps agents produce natural prose without flattening the author's voice or relying on mechanical "anti-AI" word replacement.
+The first skill in this collection, `humanize-text`, helps agents produce natural prose without flattening the author's voice or relying on mechanical "anti-AI" word replacement.
 
 It supports editing, drafting, and detection of observable formulaic writing patterns. It does not claim to detect AI authorship or invent personal experiences, facts, sources, quotations, or technical behavior.
 
-See [the skill](skills/human-writing/SKILL.md) and its [examples](examples/human-writing/) for details.
+See [the skill](skills/humanize-text/SKILL.md) and its [examples](examples/humanize-text/) for details.
 
 ## Adding a skill
 
