@@ -1,0 +1,13 @@
+interface:
+  display_name: "Use Telegram Serverless"
+  short_description: "Architect, build, deploy, and debug bots and Mini Apps on Telegram Serverless"
+  default_prompt: >-
+    Use Telegram Serverless to complete this bot, Mini App, database, or tgcloud CLI task.
+    Select the matching workflow route, preserve existing local and remote work, enforce
+    V8 isolate and SDK contracts, and clearly separate offline checks, remote test runs,
+    deployments, and database migrations.
+policy:
+  products:
+    - CHAT
+    - CODEX
+  allow_implicit_invocation: true
