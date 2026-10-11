@@ -1,6 +1,6 @@
 ---
 name: use-telegram-serverless
-description: Build, ship, and debug Telegram bots and full-stack Mini Apps on Telegram Serverless—powered by V8 JavaScript isolates, built-in SQLite (sdk/db), native Bot API and HTTP (sdk/api, sdk/fetch), authenticated Mini App RPC (Telegram.WebApp.Serverless.call), static hosting, and the tgcloud CLI. Use when working on Telegram Serverless projects, tgcloud/, tgcloud.jsonc, handlers, endpoints, SQLite migrations, or Telegram Stars payments.
+description: Build, ship, and debug simple or full-stack Telegram bots and Mini Apps on Telegram Serverless—powered by V8 JavaScript isolates, built-in SQLite (sdk/db), native Bot API and HTTP (sdk/api, sdk/fetch), authenticated Mini App RPC (Telegram.WebApp.Serverless.call), static hosting, and the tgcloud CLI. Use when working on any Telegram Serverless project, from a single-file bot handler to a stateful Mini App with tgcloud/, tgcloud.jsonc, SQLite migrations, or Telegram Stars payments.
 license: MIT
 compatibility: Portable across Agent Skills hosts (Claude Code, Cursor, Codex, Antigravity, Gemini, GitHub Copilot, Windsurf, OpenCode, Cline). Local checks require no network. Remote testing, deployment, and migrations require Node.js >=18, the project-local @tgcloud/cli, and an authorized Telegram Serverless CLI access token.
 metadata:
@@ -11,16 +11,16 @@ metadata:
 
 # Use Telegram Serverless
 
-Build, ship, and scale Telegram bots and full-stack Mini Apps directly inside Telegram's cloud—with zero servers to manage.
+Build, ship, and scale simple or full-stack Telegram bots and Mini Apps directly inside Telegram's cloud—with zero servers to manage.
 
 Powered by **[Telegram Serverless](https://core.telegram.org/bots/serverless)** (`tgcloud`): instant **V8 JavaScript (ES Module) isolates**, a built-in **SQLite database** (`sdk/db`), native **Bot API & HTTP clients** (`sdk/api`, `sdk/fetch`), authenticated **Mini App RPC endpoints** (`Telegram.WebApp.Serverless.call`), and built-in **static hosting** (`tgcloud.ai`).
 
 ## When to Use
 
-- **Zero-server Telegram bots & Mini Apps**: You're working with **Telegram Serverless**, `tgcloud`, `@tgcloud/cli`, `@tgcloud/bot`, or a project containing `tgcloud/` or `tgcloud.jsonc`.
-- **V8 JavaScript backend & SQLite data**: You want to build or update **bot handlers** (`tgcloud/handlers/*.js`), authenticated **Mini App endpoints** (`tgcloud/endpoints/*.js`), **shared ES modules** (`tgcloud/lib/**/*.js`), **SQLite schemas & queries** (`tgcloud/schema.js`), or **Mini App static hosting** (`https://app<app_id>.tgcloud.ai/`).
-- **Production features out of the box**: You're adding conversational state machines, 64-byte callback routers, **Telegram Stars (`XTR`) payments**, inline queries, progressive draft replies (`sendMessageDraft`), or `Telegram.WebApp.Serverless.call` frontend integrations.
-- **Safe cloud operations & debugging**: You need code review, security auditing, zero-downtime SQLite schema migrations (`tgcloud migrate`), remote sandbox testing (`tgcloud run`), live deployment (`tgcloud push`), or local/cloud sync recovery.
+- **Any Telegram Serverless project (simple or full-stack)**: You're starting a quick single-handler bot, building a lightweight Mini App, or scaling a full-stack app with **Telegram Serverless**, `tgcloud`, `@tgcloud/cli`, `@tgcloud/bot`, `tgcloud/`, or `tgcloud.jsonc`.
+- **V8 JavaScript backend & SQLite data**: You want to create or update **bot handlers** (`tgcloud/handlers/*.js`), authenticated **Mini App endpoints** (`tgcloud/endpoints/*.js`), **shared ES modules** (`tgcloud/lib/**/*.js`), **SQLite schemas & queries** (`tgcloud/schema.js`), or **Mini App static hosting** (`https://app<app_id>.tgcloud.ai/`).
+- **Simple commands or rich production flows**: You're implementing anything from `/start` commands, inline keyboards, and outbound `sdk/fetch` calls to conversational state machines, 64-byte callback routers, **Telegram Stars (`XTR`) payments**, inline queries, progressive draft replies (`sendMessageDraft`), or `Telegram.WebApp.Serverless.call` frontend integrations.
+- **Safe cloud operations & debugging**: You need code review, security auditing, zero-downtime SQLite schema migrations (`tgcloud migrate`), remote sandbox testing (`tgcloud run`), live deployment (`tgcloud push`), webhook sync, or local/cloud conflict recovery.
 
 ## When Not to Use
 
@@ -47,13 +47,13 @@ Select the route that matches the user's authorized intent and load **only** the
 | :--- | :--- | :--- | :--- |
 | **1. Explain, Audit, or Review** | Explain behavior or report concrete code/security/migration findings without modifying state | Relevant domain reference | [Debugging & Audit Playbook](references/debugging-playbook.md) (for audits) |
 | **2. Set Up, Scaffold, or Link** | Create a project (`npm create @tgcloud/bot` / `tgcloud init`), add modules (`tgcloud add`), or guide `tgcloud login` | [Setup & Auth](references/setup.md) | — |
-| **3. Build or Modify a Bot** | Author update handler source files (`tgcloud/handlers/`), shared `lib/` modules, Bot API calls, or HTTP integrations | [Runtime & SDK](references/runtime-sdk.md) | [Database](references/database.md) (if stateful), [Patterns & Recipes](references/patterns-and-recipes.md) (only for wizards, payments, callbacks, drafts, or inline) |
-| **4. Build or Modify a Mini App** | Author authenticated `tgcloud/endpoints/`, frontend `Serverless.call`, and `tgcloud.jsonc` static hosting | [Mini Apps](references/mini-apps.md) | [Patterns & Recipes](references/patterns-and-recipes.md) (for Promise RPC wrapper / RBAC), [Database](references/database.md) (if querying DB) |
+| **3. Build or Modify a Bot** | Author simple or stateful update handlers (`tgcloud/handlers/`), shared `lib/` modules, Bot API calls, or HTTP integrations | [Runtime & SDK](references/runtime-sdk.md) | [Database](references/database.md) (if stateful), [Patterns & Recipes](references/patterns-and-recipes.md) (only for wizards, payments, callbacks, drafts, or inline) |
+| **4. Build or Modify a Mini App** | Configure static frontend hosting (`tgcloud.jsonc`) and/or author authenticated `tgcloud/endpoints/` with `Serverless.call` | [Mini Apps](references/mini-apps.md) | [Patterns & Recipes](references/patterns-and-recipes.md) (for Promise RPC wrapper / RBAC), [Database](references/database.md) (if querying DB) |
 | **5. Design or Evolve Database** | Author `tgcloud/schema.js`, write atomic `sdk/db` queries, or plan/execute safe schema migrations | [Database & Migrations](references/database.md) | — |
 | **6. Validate & Test** | Run offline checks (syntax, layout, ownership, mocks) or authorized remote execution (`tgcloud run`) | [Operations](references/operations.md) | [Debugging & Audit Playbook](references/debugging-playbook.md) (if tests fail) |
 | **7. Deploy Changes** | Build static assets (if applicable) and publish reviewed modules/assets via targeted or full `tgcloud push` | [Operations](references/operations.md) | [Mini Apps](references/mini-apps.md) (if static hosting is configured) |
 | **8. Diagnose, Sync, or Upgrade** | Troubleshoot failures, resolve local/cloud divergence, sync webhooks, or run `tgcloud upgrade` | [Debugging & Audit Playbook](references/debugging-playbook.md), [Operations](references/operations.md) | [Setup](references/setup.md) (for auth or legacy layout issues) |
-| **9. Full-Stack End-to-End Build** | Sequence Database Schema $\rightarrow$ Shared `lib/` $\rightarrow$ Bot Handlers $\rightarrow$ Mini App Endpoints & Frontend $\rightarrow$ Validation | [Database](references/database.md), [Runtime & SDK](references/runtime-sdk.md), [Mini Apps](references/mini-apps.md) | [Patterns & Recipes](references/patterns-and-recipes.md) (only for advanced recipes used) |
+| **9. End-to-End Full-Stack Build** | Sequence Database Schema $\rightarrow$ Shared `lib/` $\rightarrow$ Bot Handlers $\rightarrow$ Mini App Endpoints & Frontend $\rightarrow$ Validation | [Database](references/database.md), [Runtime & SDK](references/runtime-sdk.md), [Mini Apps](references/mini-apps.md) | [Patterns & Recipes](references/patterns-and-recipes.md) (only for advanced recipes used) |
 
 ### Routing & Design Alignment ("Grill When Ambiguous, Execute When Clear")
 
