@@ -1,6 +1,6 @@
 ---
 name: use-telegram-serverless
-description: Build, ship, and debug simple or full-stack Telegram bots and Mini Apps on Telegram Serverless—powered by V8 JavaScript isolates, built-in SQLite (sdk/db), native Bot API and HTTP (sdk/api, sdk/fetch), authenticated Mini App RPC (Telegram.WebApp.Serverless.call), static hosting, and the tgcloud CLI. Use when working on any Telegram Serverless project, from a single-file bot handler to a stateful Mini App with tgcloud/, tgcloud.jsonc, SQLite migrations, or Telegram Stars payments.
+description: Build, ship, and scale simple or full-stack Telegram bots and Mini Apps on Telegram Serverless with V8 JS, SQLite (sdk/db), Mini App RPC, and tgcloud. Use for any Telegram Serverless project—from a single-file bot handler to a stateful Mini App with tgcloud.jsonc static hosting, SQLite migrations (tgcloud migrate), sdk/api, sdk/fetch, Telegram.WebApp.Serverless.call, or Telegram Stars (XTR) payments.
 license: MIT
 compatibility: Portable across Agent Skills hosts (Claude Code, Cursor, Codex, Antigravity, Gemini, GitHub Copilot, Windsurf, OpenCode, Cline). Local checks require no network. Remote testing, deployment, and migrations require Node.js >=18, the project-local @tgcloud/cli, and an authorized Telegram Serverless CLI access token.
 metadata:
