@@ -9,7 +9,7 @@ Skills in this repository are designed to be useful across tools that support th
 | Skill | Description |
 | --- | --- |
 | [humanize-text](skills/humanize-text/) | Write and rewrite natural, specific, human-sounding prose while preserving voice, meaning, nuance, and facts. |
-| [use-telegram-serverless](skills/use-telegram-serverless/) | Architect, build, review, test, deploy, and debug Telegram bots and Mini Apps on Telegram Serverless (`tgcloud`, V8 SDK, SQLite database, and static hosting). |
+| [use-telegram-serverless](skills/use-telegram-serverless/) | Build, ship, and scale Telegram bots and full-stack Mini Apps directly inside Telegram's cloud—powered by V8 JavaScript isolates, built-in SQLite (`sdk/db`), native Bot API & HTTP (`sdk/api`, `sdk/fetch`), static hosting, and `tgcloud`. |
 
 ## Install
 
@@ -63,12 +63,12 @@ See [the skill](skills/humanize-text/SKILL.md) and its [examples](examples/human
 
 ## Use Telegram Serverless
 
-`use-telegram-serverless` equips agents to build, audit, test, deploy, and troubleshoot bots and full-stack Mini Apps on [Telegram Serverless](https://core.telegram.org/bots/serverless):
+Build, ship, and scale Telegram bots and full-stack Mini Apps directly inside [Telegram Serverless](https://core.telegram.org/bots/serverless)—with zero servers to manage:
 
-- **Complete V8 Runtime & SDK Coverage**: Update handlers (`tgcloud/handlers/*.js`), authenticated Mini App endpoints (`tgcloud/endpoints/*.js`), shared modules (`tgcloud/lib/**/*.js`), Bot API (`sdk/api`), binary files (`InputFile`, `getFileContent`, `getFileStream`), and outbound HTTP (`sdk/fetch`).
-- **SQLite Database & Zero-Downtime Migrations**: Schema DSL (`tgcloud/schema.js`), atomic upserts and query operators (`sdk/db`), application-level relational integrity (no foreign keys), `.deprecated()` two-phase drops, and safe migration sequencing (`tgcloud migrate`).
-- **Production Blueprints & Superpowers**: SQLite conversational state machines, 64-byte callback query routers, deep linking (`?start=` / `?startapp=`), Telegram Stars (`XTR`) payments, AI/LLM streaming bots, Promise-based `Telegram.WebApp.Serverless.call` wrappers, and `tgcloud.jsonc` static hosting.
-- **Strict Operational & Security Guardrails**: Clear separation between offline checks (`tgcloud diff`), live remote sandbox runs (`tgcloud run`), targeted vs. full deployments (`tgcloud push`), conflict recovery, and zero-trust Mini App ownership verification (`ctx.initData.user.id`).
+- **V8 JavaScript Runtime & Native SDK**: Instant ES module isolates (`tgcloud/handlers/*.js`, `tgcloud/endpoints/*.js`, `tgcloud/lib/**/*.js`) powered by built-in `sdk/api` (Bot API), `sdk/fetch` (outbound HTTP), and `Uint8Array` / `InputFile` binary helpers.
+- **Built-In SQLite Database & Safe Migrations**: Declarative schema DSL (`tgcloud/schema.js`), atomic queries and upserts (`sdk/db`), application-level relational integrity (no foreign keys), `.deprecated()` two-phase drops, and zero-downtime migration sequencing (`tgcloud migrate`).
+- **Full-Stack Mini Apps & Production Recipes**: Authenticated RPC endpoints (`Telegram.WebApp.Serverless.call`), `tgcloud.jsonc` static hosting (`tgcloud.ai`), SQLite state machines, 64-byte callback routers, **Telegram Stars (`XTR`) payments**, inline mode, and progressive draft replies.
+- **Safe Cloud Operations & Guardrails**: Clear separation between offline checks (`tgcloud diff`), remote sandbox testing (`tgcloud run`), live deployment (`tgcloud push`), conflict recovery, and zero-trust Mini App ownership verification (`ctx.initData.user.id`).
 
 See [the skill](skills/use-telegram-serverless/SKILL.md) and its [examples](examples/use-telegram-serverless/) for details.
 

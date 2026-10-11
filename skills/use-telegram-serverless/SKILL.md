@@ -1,6 +1,6 @@
 ---
 name: use-telegram-serverless
-description: Build, architect, review, test, deploy, and debug Telegram bots and Mini Apps on Telegram Serverless using tgcloud, its V8 JavaScript SDK (sdk, sdk/db, sdk/api, sdk/fetch), SQLite-backed database, and static hosting. Use when working on Telegram Serverless projects, tgcloud/, tgcloud.jsonc, update handlers, authenticated Mini App endpoints (Telegram.WebApp.Serverless.call), schema migrations, Telegram Stars payments, stateful bots, or tgcloud CLI operations; not for generic bots hosted on external servers (VPS, Cloudflare, Vercel, AWS).
+description: Build, ship, and debug Telegram bots and full-stack Mini Apps on Telegram Serverless—powered by V8 JavaScript isolates, built-in SQLite (sdk/db), native Bot API and HTTP (sdk/api, sdk/fetch), authenticated Mini App RPC (Telegram.WebApp.Serverless.call), static hosting, and the tgcloud CLI. Use when working on Telegram Serverless projects, tgcloud/, tgcloud.jsonc, handlers, endpoints, SQLite migrations, or Telegram Stars payments.
 license: MIT
 compatibility: Portable across Agent Skills hosts (Claude Code, Cursor, Codex, Antigravity, Gemini, GitHub Copilot, Windsurf, OpenCode, Cline). Local checks require no network. Remote testing, deployment, and migrations require Node.js >=18, the project-local @tgcloud/cli, and an authorized Telegram Serverless CLI access token.
 metadata:
@@ -11,14 +11,16 @@ metadata:
 
 # Use Telegram Serverless
 
-Architect, build, review, test, deploy, and troubleshoot bots and full-stack Mini Apps on [Telegram Serverless](https://core.telegram.org/bots/serverless), maintaining strict separation between offline local verification, remote sandbox execution (`tgcloud run`), live deployment (`tgcloud push`), and database schema migration (`tgcloud migrate`).
+Build, ship, and scale Telegram bots and full-stack Mini Apps directly inside Telegram's cloud—with zero servers to manage.
+
+Powered by **[Telegram Serverless](https://core.telegram.org/bots/serverless)** (`tgcloud`): instant **V8 JavaScript (ES Module) isolates**, a built-in **SQLite database** (`sdk/db`), native **Bot API & HTTP clients** (`sdk/api`, `sdk/fetch`), authenticated **Mini App RPC endpoints** (`Telegram.WebApp.Serverless.call`), and built-in **static hosting** (`tgcloud.ai`).
 
 ## When to Use
 
-- The user mentions **Telegram Serverless**, `tgcloud`, `@tgcloud/cli`, `@tgcloud/bot`, or works in a repository containing `tgcloud/` or `tgcloud.jsonc` / `tgcloud.json`.
-- The task involves authoring or reviewing local project code for Telegram Serverless **update handlers** (`tgcloud/handlers/*.js`), **Mini App endpoints** (`tgcloud/endpoints/*.js`), **shared modules** (`tgcloud/lib/**/*.js`), **SQLite schemas** (`tgcloud/schema.js`), or **Mini App static hosting** (`https://app<app_id>.tgcloud.ai/`).
-- The user wants to implement advanced bot or Mini App source patterns on Telegram Serverless: conversational state machines, callback routers, Telegram Stars/payments, inline queries, progressive draft replies (`sendMessageDraft`) via `sdk/fetch`, or `Telegram.WebApp.Serverless.call` RPC wrappers.
-- An existing Telegram Serverless project needs code review, security auditing, schema migration planning, local/cloud conflict recovery, webhook synchronization, or legacy layout upgrading.
+- **Zero-server Telegram bots & Mini Apps**: You're working with **Telegram Serverless**, `tgcloud`, `@tgcloud/cli`, `@tgcloud/bot`, or a project containing `tgcloud/` or `tgcloud.jsonc`.
+- **V8 JavaScript backend & SQLite data**: You want to build or update **bot handlers** (`tgcloud/handlers/*.js`), authenticated **Mini App endpoints** (`tgcloud/endpoints/*.js`), **shared ES modules** (`tgcloud/lib/**/*.js`), **SQLite schemas & queries** (`tgcloud/schema.js`), or **Mini App static hosting** (`https://app<app_id>.tgcloud.ai/`).
+- **Production features out of the box**: You're adding conversational state machines, 64-byte callback routers, **Telegram Stars (`XTR`) payments**, inline queries, progressive draft replies (`sendMessageDraft`), or `Telegram.WebApp.Serverless.call` frontend integrations.
+- **Safe cloud operations & debugging**: You need code review, security auditing, zero-downtime SQLite schema migrations (`tgcloud migrate`), remote sandbox testing (`tgcloud run`), live deployment (`tgcloud push`), or local/cloud sync recovery.
 
 ## When Not to Use
 
