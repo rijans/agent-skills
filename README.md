@@ -1,5 +1,9 @@
 # Agent Skills
 
+[![skills.sh](https://img.shields.io/badge/skills.sh-rijans%2Fagent--skills-black?style=flat-square)](https://www.skills.sh/rijans/agent-skills)
+[![Claude Code Marketplace](https://img.shields.io/badge/Claude_Code-Plugin_Marketplace-D97757?style=flat-square)](https://github.com/rijans/agent-skills/blob/main/.claude-plugin/marketplace.json)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
+
 A collection of portable Agent Skills for AI coding agents, editors, and assistants.
 
 Skills in this repository are designed to be useful across tools that support the open Agent Skills format, while keeping each skill independently installable and maintainable.
