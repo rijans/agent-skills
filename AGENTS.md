@@ -82,7 +82,8 @@ Skills must be both **discoverable via Google Search, GitHub Search, and `skills
 3. **Synchronize Repository Metadata When Adding/Updating Skills**:
    - Update [`README.md`](README.md) (`## Skills` table, repository tree, and dedicated skill section).
    - Update [`skills.sh.json`](skills.sh.json) so the skill is grouped cleanly on `https://www.skills.sh/rijans/agent-skills`.
-   - Update [`.claude-plugin/marketplace.json`](.claude-plugin/marketplace.json) so Claude Code `/plugin marketplace add rijans/agent-skills` and marketplace indexers discover the skill.
+   - Update [`.claude-plugin/marketplace.json`](.claude-plugin/marketplace.json) and [`.claude-plugin/plugin.json`](.claude-plugin/plugin.json) so Claude Code `/plugin marketplace add rijans/agent-skills` and marketplace indexers discover the skill.
+   - Update [`.cursor-plugin/marketplace.json`](.cursor-plugin/marketplace.json) and [`.cursor-plugin/plugin.json`](.cursor-plugin/plugin.json) so Cursor plugin directories discover the skill.
    - Update [`agents/openai.yaml`](skills/use-telegram-serverless/agents/openai.yaml) (`display_name`, `short_description`, `default_prompt`).
 
 ---
@@ -91,10 +92,12 @@ Skills must be both **discoverable via Google Search, GitHub Search, and `skills
 
 Before committing and publishing any new or updated skill:
 
-1. **Validate Files & Links**:
-   - Verify YAML frontmatter syntax (`---` delimiters, valid keys: `name`, `description`, `license`, `compatibility`, `metadata`).
-   - Verify every relative markdown link (`references/*.md`, `examples/*`) resolves to an existing file.
-   - If the skill includes JavaScript/TypeScript examples, run `node --check` or the relevant syntax check on every example file.
+1. **Validate Files, Links & Manifests**:
+   - Run the automated validator script (which also runs in GitHub Actions CI on every push and PR):
+     ```bash
+     node scripts/validate-skills.mjs
+     ```
+   - This verifies YAML frontmatter syntax, the 155-character opening sentence SEO rule, relative markdown links across `SKILL.md` and `references/*.md`, JavaScript syntax in `examples/`, and synchronization across `skills.sh.json`, `.claude-plugin/*`, and `.cursor-plugin/*`.
 2. **Commit & Push to `main`**:
    - Use clear conventional commits (`feat(<skill>): ...`, `docs(<skill>): ...`, `fix(<skill>): ...`) and push to `origin/main`.
 3. **Trigger `skills.sh` Indexing & Cache Refresh**:

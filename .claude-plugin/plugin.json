@@ -1,0 +1,26 @@
+{
+  "name": "rijans-agent-skills",
+  "description": "Portable Agent Skills for AI coding agents, editors, and assistants — including use-telegram-serverless (Telegram Serverless bots, Mini Apps, V8 JS, SQLite, tgcloud) and humanize-text.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Jaber Al Nahian",
+    "email": "rijans@users.noreply.github.com"
+  },
+  "homepage": "https://www.skills.sh/rijans/agent-skills",
+  "repository": "https://github.com/rijans/agent-skills",
+  "license": "MIT",
+  "keywords": [
+    "agent-skills",
+    "skill-md",
+    "telegram-serverless",
+    "telegram-bot",
+    "telegram-mini-apps",
+    "tgcloud",
+    "sqlite",
+    "humanize-text",
+    "claude-code",
+    "cursor",
+    "codex",
+    "antigravity"
+  ]
+}
