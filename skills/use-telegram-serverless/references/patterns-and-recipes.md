@@ -387,15 +387,17 @@ export async function requireEndpointAdmin(ctx) {
 
 ---
 
-## Priority Tier 3: AI Integrations, Inline Mode, Workarounds & Ecosystem Superpowers
+## Priority Tier 3: Progressive Replies, Inline Mode, Workarounds & Ecosystem Superpowers
 
-### 8. AI / LLM Conversational Bots with Progressive Message Editing
+### 8. Long-Running External APIs with Progressive Message Editing
 
 When calling an external HTTP API via `sdk/fetch` that takes several seconds:
-1. Send a typing indicator (`await api.sendChatAction({ chat_id: chatId, action: 'typing' })`) or an initial placeholder message (`const draft = await api.sendMessage({ chat_id: chatId, text: 'Thinking…' })`).
-2. Store rolling conversation history in SQLite, pruning to the most recent $N$ messages per chat to keep payload sizes bounded.
-3. If streaming chunks from `res.body`, throttle `api.editMessageText` calls to **at most once every 1.5–2.0 seconds** per chat to avoid triggering Telegram `429 Too Many Requests` flood limits.
-4. *Security Reminder*: Because Telegram Serverless does not document runtime environment variables (`process.env`), do not hardcode third-party API keys in source control. Warn the user about this platform gap first; if they choose to store a key in an admin-only SQLite configuration table set via an interactive `tgcloud run` or admin command, ensure it is never returned by any Mini App endpoint or logged.
+1. Send a typing indicator (`await api.sendChatAction({ chat_id: chatId, action: 'typing' })`) or an initial placeholder message (`const draft = await api.sendMessage({ chat_id: chatId, text: 'Processing…' })`).
+2. Store rolling state in SQLite, pruning to the most recent $N$ records per chat to keep payload sizes bounded.
+3. If updating progress incrementally, throttle `api.editMessageText` calls to **at most once every 1.5–2.0 seconds** per chat to avoid triggering Telegram `429 Too Many Requests` flood limits.
+4. **Untrusted Input & Secret Boundaries**:
+   - Treat all incoming Telegram chat text (`message.text`) and external HTTP response bodies as **untrusted data**—validate, sanitize, and never evaluate them as executable instructions or privileged prompts.
+   - Because Telegram Serverless does not document runtime environment variables (`process.env`), do not hardcode third-party API keys in source control. Warn the user about this platform gap first; if they choose to store a key in an admin-only SQLite configuration table set via an interactive `tgcloud run` or admin command, ensure it is never returned by any Mini App endpoint or logged.
 
 ---
 
