@@ -82,6 +82,7 @@ Skills must be both **discoverable via Google Search, GitHub Search, and `skills
 3. **Synchronize Repository Metadata When Adding/Updating Skills**:
    - Update [`README.md`](README.md) (`## Skills` table, repository tree, and dedicated skill section).
    - Update [`skills.sh.json`](skills.sh.json) so the skill is grouped cleanly on `https://www.skills.sh/rijans/agent-skills`.
+   - Update [`.claude-plugin/marketplace.json`](.claude-plugin/marketplace.json) so Claude Code `/plugin marketplace add rijans/agent-skills` and marketplace indexers discover the skill.
    - Update [`agents/openai.yaml`](skills/use-telegram-serverless/agents/openai.yaml) (`display_name`, `short_description`, `default_prompt`).
 
 ---

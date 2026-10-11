@@ -13,17 +13,29 @@ Skills in this repository are designed to be useful across tools that support th
 
 ## Install
 
-Install the collection with the skills CLI:
+### Using the `skills` CLI (Claude Code, Cursor, Codex, Antigravity, Windsurf, Copilot, Gemini)
+
+Install the full collection:
 
 ```bash
 npx skills add rijans/agent-skills
 ```
 
-To install a specific skill from this repository:
+Or install a specific skill:
 
 ```bash
-npx skills add rijans/agent-skills --skill humanize-text
 npx skills add rijans/agent-skills --skill use-telegram-serverless
+npx skills add rijans/agent-skills --skill humanize-text
+```
+
+### Using Claude Code Plugin Marketplace
+
+Register this repository as a Claude Code plugin marketplace and install skills directly:
+
+```text
+/plugin marketplace add rijans/agent-skills
+/plugin install use-telegram-serverless@rijans-agent-skills
+/plugin install humanize-text@rijans-agent-skills
 ```
 
 ## Repository structure
