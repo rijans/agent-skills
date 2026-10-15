@@ -6,7 +6,8 @@
       "title": "Telegram & Cloud Engineering",
       "description": "Build, ship, and scale simple or full-stack Telegram bots and Mini Apps on Telegram Serverless with V8 JS, SQLite, and tgcloud.",
       "skills": [
-        "use-telegram-serverless"
+        "use-telegram-serverless",
+        "telegram-serverless-bot"
       ]
     },
     {

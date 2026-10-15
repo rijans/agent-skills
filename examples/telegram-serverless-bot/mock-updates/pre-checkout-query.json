@@ -1,0 +1,16 @@
+{
+  "update": {
+    "update_id": 1000003,
+    "pre_checkout_query": {
+      "id": "query_test_pre_checkout_1",
+      "from": {
+        "id": 12345678,
+        "is_bot": false,
+        "first_name": "Alex"
+      },
+      "currency": "XTR",
+      "total_amount": 100,
+      "invoice_payload": "order:premium_pass"
+    }
+  }
+}

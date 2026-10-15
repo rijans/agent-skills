@@ -19,6 +19,15 @@
       ]
     },
     {
+      "name": "telegram-serverless-bot",
+      "description": "Build, ship, and test Telegram bots on Telegram Serverless with V8 JS, SQLite sessions (sdk/db), interactive keyboards, and Telegram Stars (XTR).",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/telegram-serverless-bot"
+      ]
+    },
+    {
       "name": "humanize-text",
       "description": "Write and rewrite natural, specific, human-sounding prose while preserving voice, meaning, nuance, and facts.",
       "source": "./",

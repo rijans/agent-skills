@@ -1,0 +1,5 @@
+{
+  "$schema": "https://tgcloud.ai/schema.json",
+  "name": "media-and-keyboard-bot",
+  "version": "1.0.0"
+}

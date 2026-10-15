@@ -1,0 +1,21 @@
+{
+  "update": {
+    "update_id": 1000002,
+    "callback_query": {
+      "id": "query_test_cb_1",
+      "from": {
+        "id": 12345678,
+        "is_bot": false,
+        "first_name": "Alex"
+      },
+      "message": {
+        "message_id": 101,
+        "chat": {
+          "id": 12345678,
+          "type": "private"
+        }
+      },
+      "data": "cmd:ping"
+    }
+  }
+}

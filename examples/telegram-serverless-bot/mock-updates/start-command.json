@@ -1,0 +1,21 @@
+{
+  "update": {
+    "update_id": 1000001,
+    "message": {
+      "message_id": 101,
+      "from": {
+        "id": 12345678,
+        "is_bot": false,
+        "first_name": "Alex",
+        "username": "alexdev"
+      },
+      "chat": {
+        "id": 12345678,
+        "first_name": "Alex",
+        "type": "private"
+      },
+      "date": 1729000000,
+      "text": "/start"
+    }
+  }
+}

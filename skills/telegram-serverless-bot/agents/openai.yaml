@@ -1,0 +1,5 @@
+interface:
+  display_name: "Telegram Serverless Bot"
+  short_description: "Build, ship, and test Telegram bots on Telegram Serverless with V8 JS, SQLite, and tgcloud"
+  default_prompt: |
+    Use Telegram Serverless Bot to build, configure, test, or deploy this Telegram bot, conversation flow, keyboard, or Stars payment task.

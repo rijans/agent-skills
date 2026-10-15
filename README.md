@@ -16,6 +16,7 @@ Skills in this repository are designed to be useful across tools that support th
 | --- | --- |
 | [humanize-text](skills/humanize-text/) | Write and rewrite natural, specific, human-sounding prose while preserving voice, meaning, nuance, and facts. |
 | [use-telegram-serverless](skills/use-telegram-serverless/) | Build, ship, and scale simple or full-stack Telegram bots and Mini Apps directly inside Telegram's cloud—powered by V8 JavaScript isolates, built-in SQLite (`sdk/db`), native Bot API & HTTP (`sdk/api`, `sdk/fetch`), static hosting, and `tgcloud`. |
+| [telegram-serverless-bot](skills/telegram-serverless-bot/) | Build, ship, and test Telegram bots on Telegram Serverless with V8 JS, SQLite sessions (`sdk/db`), interactive keyboards, and Telegram Stars (`XTR`). |
 
 ## Install
 
@@ -30,6 +31,7 @@ npx skills add rijans/agent-skills
 Or install a specific skill:
 
 ```bash
+npx skills add rijans/agent-skills --skill telegram-serverless-bot
 npx skills add rijans/agent-skills --skill use-telegram-serverless
 npx skills add rijans/agent-skills --skill humanize-text
 ```
@@ -40,6 +42,7 @@ Register this repository as a Claude Code plugin marketplace and install skills 
 
 ```text
 /plugin marketplace add rijans/agent-skills
+/plugin install telegram-serverless-bot@rijans-agent-skills
 /plugin install use-telegram-serverless@rijans-agent-skills
 /plugin install humanize-text@rijans-agent-skills
 ```
@@ -53,6 +56,19 @@ skills/
 ├── humanize-text/
 │   ├── SKILL.md
 │   └── eval.md
+├── telegram-serverless-bot/
+│   ├── SKILL.md
+│   ├── eval.md
+│   ├── agents/
+│   │   └── openai.yaml
+│   └── references/
+│       ├── commands-and-routing.md
+│       ├── keyboards-and-callbacks.md
+│       ├── conversational-fsm.md
+│       ├── stars-payments.md
+│       ├── media-and-files.md
+│       ├── testing-and-sandbox.md
+│       └── sources.md
 └── use-telegram-serverless/
     ├── SKILL.md
     ├── eval.md
@@ -89,6 +105,18 @@ Build, ship, and scale simple or full-stack Telegram bots and Mini Apps directly
 - **Safe Cloud Operations & Guardrails**: Clear separation between offline checks (`tgcloud diff`), remote sandbox testing (`tgcloud run`), live deployment (`tgcloud push`), conflict recovery, and zero-trust Mini App ownership verification (`ctx.initData.user.id`).
 
 See [the skill](skills/use-telegram-serverless/SKILL.md) and its [examples](examples/use-telegram-serverless/) for details.
+
+## Telegram Serverless Bot
+
+Build, ship, and test Telegram bots directly inside [Telegram Serverless](https://core.telegram.org/bots/serverless)—laser-focused on bot handlers, stateful conversations, and Stars payments:
+
+- **Progressive Bot Architecture**: Single-handler dispatcher (`tgcloud/handlers/bot.js`) for simple command bots, scaling to modular feature handlers (`tgcloud/lib/`) and persistent SQLite session state for multi-step wizards.
+- **Interactive Keyboards & 64-Byte Callback Routers**: Inline buttons, reply markups, menu buttons, and compact payload encoding pattern (`<prefix>:<action>:<id>`) with immediate `answerCallbackQuery` acknowledgment.
+- **Telegram Stars (`XTR`) Digital Payments**: Native Stars invoice dispatch (`sendInvoice`), `<10s` pre-checkout verification (`answerPreCheckoutQuery`), and fulfillment ledgering in SQLite (`successful_payment`).
+- **Binary Media & Documents**: In-memory binary uploads via `Uint8Array` and `InputFile`, CDN asset downloads, and outbound media streaming.
+- **Sandbox Testing & Mock Fixtures**: Offline update fixtures (`start-command.json`, `callback-query.json`, `pre-checkout-query.json`) for safe testing with `tgcloud run`.
+
+See [the skill](skills/telegram-serverless-bot/SKILL.md) and its [examples](examples/telegram-serverless-bot/) for details.
 
 ## Adding a skill
 

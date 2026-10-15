@@ -1,0 +1,5 @@
+{
+  "$schema": "https://tgcloud.ai/schema.json",
+  "name": "starter-command-bot",
+  "version": "1.0.0"
+}

@@ -16,6 +16,12 @@
       "description": "Build, ship, and scale simple or full-stack Telegram bots and Mini Apps on Telegram Serverless with V8 JS, SQLite (sdk/db), Mini App RPC, and tgcloud."
     },
     {
+      "name": "telegram-serverless-bot",
+      "source": "./skills/telegram-serverless-bot",
+      "skills": "./",
+      "description": "Build, ship, and test Telegram bots on Telegram Serverless with V8 JS, SQLite sessions (sdk/db), interactive keyboards, and Telegram Stars (XTR)."
+    },
+    {
       "name": "humanize-text",
       "source": "./skills/humanize-text",
       "skills": "./",
