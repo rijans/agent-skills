@@ -106,24 +106,25 @@ OpenAuth provides native adapters for standard social login OAuth2 flows:
 ```typescript
 import { issuer } from "@openauthjs/openauth";
 import { GithubProvider } from "@openauthjs/openauth/provider/github";
-import { GoogleProvider } from "@openauthjs/openauth/provider/google";
+import { GoogleOidcProvider } from "@openauthjs/openauth/provider/google";
 import { DiscordProvider } from "@openauthjs/openauth/provider/discord";
 
 export const app = issuer({
   // ... subjects & storage
   providers: {
+    // 1. GitHub OAuth2
     github: GithubProvider({
       clientID: process.env.GITHUB_CLIENT_ID!,
       clientSecret: process.env.GITHUB_CLIENT_SECRET!,
       scopes: ["read:user", "user:email"],
     }),
 
-    google: GoogleProvider({
+    // 2. Google OIDC (Verifies email without extra profile fetch)
+    google: GoogleOidcProvider({
       clientID: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-      scopes: ["openid", "email", "profile"],
     }),
 
+    // 3. Discord OAuth2
     discord: DiscordProvider({
       clientID: process.env.DISCORD_CLIENT_ID!,
       clientSecret: process.env.DISCORD_CLIENT_SECRET!,
@@ -132,24 +133,34 @@ export const app = issuer({
   },
 
   async success(ctx, value) {
-    // 1. GitHub
-    if (value.provider === "github") {
-      const { id, login, email } = value.profile;
-      const user = await upsertOAuthUser("github", String(id), email || login);
-      return ctx.subject("user", { userID: user.id, email: user.email });
-    }
-
-    // 2. Google
+    // 1. Google (OIDC returns verified claims directly)
     if (value.provider === "google") {
-      const { sub, email } = value.profile;
-      const user = await upsertOAuthUser("google", sub, email);
+      const email = value.claims.email;
+      const user = await upsertUser("google", value.claims.sub, email);
+      return ctx.subject("user", { userID: user.id, email });
+    }
+
+    // 2. GitHub (OAuth2 provides value.tokenset.access to query API)
+    if (value.provider === "github") {
+      const res = await fetch("https://api.github.com/user", {
+        headers: {
+          Authorization: `Bearer ${value.tokenset.access}`,
+          "User-Agent": "OpenAuth",
+        },
+      });
+      const ghUser = await res.json();
+      const email = ghUser.email || `${ghUser.login}@users.noreply.github.com`;
+      const user = await upsertUser("github", String(ghUser.id), email);
       return ctx.subject("user", { userID: user.id, email: user.email });
     }
 
-    // 3. Discord
+    // 3. Discord (OAuth2 provides value.tokenset.access to query Discord user)
     if (value.provider === "discord") {
-      const { id, email, username } = value.profile;
-      const user = await upsertOAuthUser("discord", id, email || username);
+      const res = await fetch("https://discord.com/api/v10/users/@me", {
+        headers: { Authorization: `Bearer ${value.tokenset.access}` },
+      });
+      const discordUser = await res.json();
+      const user = await upsertUser("discord", discordUser.id, discordUser.email || discordUser.username);
       return ctx.subject("user", { userID: user.id, email: user.email });
     }
 

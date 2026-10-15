@@ -38,13 +38,13 @@ app.get("/callback", async (c) => {
     return c.text("Missing authorization code", 400);
   }
 
-  const tokens = await authClient.exchange(code, REDIRECT_URI);
-  if (tokens.err) {
-    return c.text(`Token exchange failed: ${tokens.err}`, 400);
+  const exchanged = await authClient.exchange(code, REDIRECT_URI);
+  if (exchanged.err) {
+    return c.text(`Token exchange failed: ${exchanged.err}`, 400);
   }
 
   // Persist tokens in HTTP-only cookies
-  setCookie(c, "access_token", tokens.access, {
+  setCookie(c, "access_token", exchanged.tokens.access, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "Lax",
@@ -52,7 +52,7 @@ app.get("/callback", async (c) => {
     maxAge: 3600,
   });
 
-  setCookie(c, "refresh_token", tokens.refresh, {
+  setCookie(c, "refresh_token", exchanged.tokens.refresh, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "Lax",

@@ -46,9 +46,16 @@ export const app = issuer({
     }
 
     if (value.provider === "github") {
-      const email = value.profile?.email || `${value.profile?.login}@users.noreply.github.com`;
+      const res = await fetch("https://api.github.com/user", {
+        headers: {
+          Authorization: `Bearer ${value.tokenset.access}`,
+          "User-Agent": "OpenAuth-Basic-Issuer",
+        },
+      });
+      const ghUser = await res.json();
+      const email = ghUser.email || `${ghUser.login}@users.noreply.github.com`;
       return ctx.subject("user", {
-        userID: `gh_${value.profile?.id}`,
+        userID: `gh_${ghUser.id}`,
         email,
       });
     }

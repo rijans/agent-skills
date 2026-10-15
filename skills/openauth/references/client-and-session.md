@@ -73,25 +73,25 @@ export async function handleCallback(request: Request) {
   const pkceVerifier = getCookie(request, "pkce_verifier");
 
   // Exchange code for access & refresh tokens
-  const tokens = await authClient.exchange(
+  const exchanged = await authClient.exchange(
     code,
     "https://myapp.com/callback",
     pkceVerifier
   );
 
-  if (tokens.err) {
-    return new Response(`Authentication failed: ${tokens.err}`, { status: 400 });
+  if (exchanged.err) {
+    return new Response(`Authentication failed: ${exchanged.err}`, { status: 400 });
   }
 
   // Store tokens in secure HTTP-only cookies
   const headers = new Headers();
   headers.append(
     "Set-Cookie",
-    `access_token=${tokens.access}; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=3600`
+    `access_token=${exchanged.tokens.access}; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=3600`
   );
   headers.append(
     "Set-Cookie",
-    `refresh_token=${tokens.refresh}; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=2592000`
+    `refresh_token=${exchanged.tokens.refresh}; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=2592000`
   );
   headers.set("Location", "/dashboard");
 

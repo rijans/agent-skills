@@ -112,9 +112,8 @@ The `success(ctx, value)` handler is the bridge between identity providers and y
 ### The `value` Parameter
 `value` contains the payload verified by the provider:
 - `value.provider`: The provider key string (e.g. `"password"`, `"code"`, `"github"`, `"google"`).
-- `value.claims`: Provider-specific verified claims (e.g. `{ email: "user@example.com" }` for `code` or `password`).
-- `value.profile`: Full OAuth profile (for GitHub, Google, Discord).
-- `value.tokens`: Upstream OAuth access tokens (if configured).
+- `value.claims`: Verified claims for PIN/code, password, or OIDC flows (e.g. `{ email: "user@example.com" }` for `code`, `password`, or `GoogleOidcProvider`).
+- `value.tokenset`: Upstream provider OAuth token set (including `value.tokenset.access`) for raw OAuth providers (e.g. `GithubProvider`, `DiscordProvider`). Use this access token to query upstream APIs (e.g. `https://api.github.com/user`) for profile metadata.
 
 ### The `ctx.subject` Helper
 `ctx.subject(type, properties)` constructs the verified JWT token claims:
