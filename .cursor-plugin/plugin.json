@@ -2,7 +2,7 @@
   "name": "rijans-agent-skills",
   "skills": "skills",
   "description": "Portable Agent Skills for AI coding agents, editors, and assistants — including openai-realtime-webrtc, restate-sdk, duckdb-wasm, mtcute, cloudflare-email-workers, openauth, discord-activities, telegram-serverless-bot, use-telegram-serverless, and humanize-text.",
-  "version": "1.8.0",
+  "version": "1.8.1",
   "author": {
     "name": "Jaber Al Nahian",
     "email": "rijans@users.noreply.github.com"
