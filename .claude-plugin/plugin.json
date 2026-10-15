@@ -1,7 +1,7 @@
 {
   "name": "rijans-agent-skills",
   "description": "Portable Agent Skills for AI coding agents, editors, and assistants — including openauth, discord-activities, telegram-serverless-bot, use-telegram-serverless, and humanize-text.",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "author": {
     "name": "Jaber Al Nahian",
     "email": "rijans@users.noreply.github.com"
