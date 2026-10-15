@@ -1,6 +1,6 @@
 {
   "name": "rijans-agent-skills",
-  "description": "Portable Agent Skills for AI coding agents, editors, and assistants — including telegram-serverless-bot, use-telegram-serverless, and humanize-text.",
+  "description": "Portable Agent Skills for AI coding agents, editors, and assistants — including discord-activities, telegram-serverless-bot, use-telegram-serverless, and humanize-text.",
   "version": "1.1.0",
   "author": {
     "name": "Jaber Al Nahian",
@@ -12,6 +12,8 @@
   "keywords": [
     "agent-skills",
     "skill-md",
+    "discord-activities",
+    "discord-embedded-app",
     "telegram-serverless",
     "telegram-bot",
     "telegram-mini-apps",

@@ -11,6 +11,13 @@
       ]
     },
     {
+      "title": "Discord & Embedded Apps",
+      "description": "Build, ship, and test Discord Activities, multiplayer voice channel web apps, and embedded games with @discord/embedded-app-sdk.",
+      "skills": [
+        "discord-activities"
+      ]
+    },
+    {
       "title": "Writing & Editorial",
       "description": "Write and rewrite natural, specific, human-sounding prose while preserving voice, meaning, nuance, and facts.",
       "skills": [

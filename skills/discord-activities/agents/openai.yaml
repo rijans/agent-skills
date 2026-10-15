@@ -1,0 +1,5 @@
+interface:
+  display_name: "Discord Activities"
+  short_description: "Build, ship, and test Discord Activities and embedded web apps with @discord/embedded-app-sdk"
+  default_prompt: |
+    Use Discord Activities to build, configure, authenticate, test, or deploy this Discord Activity, embedded web app, voice presence, or multiplayer task.

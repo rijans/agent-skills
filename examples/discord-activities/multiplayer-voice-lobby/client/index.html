@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Discord Voice Multiplayer Lobby</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 24px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #2b2d31;
+      color: #f2f3f5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      box-sizing: border-box;
+    }
+    .container {
+      width: 100%;
+      max-width: 560px;
+    }
+    .header {
+      background: #1e1f22;
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin-bottom: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .title {
+      font-size: 18px;
+      font-weight: bold;
+    }
+    .counter-box {
+      background: #1e1f22;
+      border-radius: 8px;
+      padding: 24px;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+    .count-display {
+      font-size: 48px;
+      font-weight: 800;
+      color: #5865f2;
+      margin: 12px 0;
+    }
+    .btn {
+      background: #5865f2;
+      color: white;
+      border: none;
+      padding: 10px 24px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .btn:hover { background: #4752c4; }
+    .roster {
+      background: #1e1f22;
+      border-radius: 8px;
+      padding: 16px;
+    }
+    .roster-title {
+      font-size: 14px;
+      font-weight: bold;
+      color: #949ba4;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .participant-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .participant-chip {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #2b2d31;
+      padding: 6px 12px;
+      border-radius: 20px;
+      border: 2px solid transparent;
+      transition: border-color 0.15s;
+    }
+    .participant-chip.speaking {
+      border-color: #23a55a;
+      box-shadow: 0 0 8px rgba(35, 165, 90, 0.6);
+    }
+    .chip-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+    }
+    .chip-name {
+      font-size: 14px;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <span class="title">🎮 Voice Channel Activity Lobby</span>
+      <span id="room-id" style="color: #949ba4; font-size: 12px;">Room: Loading...</span>
+    </div>
+
+    <div class="counter-box">
+      <div style="color: #949ba4; font-size: 14px;">Shared Team Counter (Synchronized)</div>
+      <div class="count-display" id="shared-count">0</div>
+      <button class="btn" id="tap-btn">+1 Tap</button>
+    </div>
+
+    <div class="roster">
+      <div class="roster-title">Connected Voice Participants (<span id="user-count">0</span>)</div>
+      <div class="participant-list" id="participant-list"></div>
+    </div>
+  </div>
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>

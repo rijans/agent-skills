@@ -22,6 +22,12 @@
       "description": "Build, ship, and test Telegram bots on Telegram Serverless with V8 JS, SQLite sessions (sdk/db), interactive keyboards, and Telegram Stars (XTR)."
     },
     {
+      "name": "discord-activities",
+      "source": "./skills/discord-activities",
+      "skills": "./",
+      "description": "Build, ship, and test Discord Activities with @discord/embedded-app-sdk, OAuth2 token exchange, /.proxy/ CSP routing, and voice channel presence."
+    },
+    {
       "name": "humanize-text",
       "source": "./skills/humanize-text",
       "skills": "./",
