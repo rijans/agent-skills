@@ -25,6 +25,13 @@
       ]
     },
     {
+      "title": "Cloudflare & Email Automation",
+      "description": "Build, deploy, and test Cloudflare Email Routing Workers with postal-mime MIME parsing, RFC 5322 mimetext replies, and AI auto-response loops.",
+      "skills": [
+        "cloudflare-email-workers"
+      ]
+    },
+    {
       "title": "Writing & Editorial",
       "description": "Write and rewrite natural, specific, human-sounding prose while preserving voice, meaning, nuance, and facts.",
       "skills": [

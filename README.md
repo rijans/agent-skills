@@ -18,6 +18,7 @@ Skills in this repository are designed to be useful across tools that support th
 | [use-telegram-serverless](skills/use-telegram-serverless/) | Build, ship, and scale simple or full-stack Telegram bots and Mini Apps directly inside Telegram's cloud—powered by V8 JavaScript isolates, built-in SQLite (`sdk/db`), native Bot API & HTTP (`sdk/api`, `sdk/fetch`), static hosting, and `tgcloud`. |
 | [telegram-serverless-bot](skills/telegram-serverless-bot/) | Build, ship, and test Telegram bots on Telegram Serverless with V8 JS, SQLite sessions (`sdk/db`), interactive keyboards, and Telegram Stars (`XTR`). |
 | [openauth](skills/openauth/) | Deploy self-hosted OAuth2 and OIDC servers with OpenAuth, createSubjects schemas, prebuilt PasswordUI and CodeUI, and cross-framework client verification. |
+| [cloudflare-email-workers](skills/cloudflare-email-workers/) | Build, deploy, and test Cloudflare Email Routing Workers with postal-mime MIME parsing, RFC 5322 mimetext replies, and AI auto-response loops. |
 | [discord-activities](skills/discord-activities/) | Build, ship, and test Discord Activities with @discord/embedded-app-sdk, OAuth2 token exchange, /.proxy/ CSP routing, and voice channel presence. |
 
 ## Install
@@ -33,6 +34,7 @@ npx skills add rijans/agent-skills
 Or install a specific skill:
 
 ```bash
+npx skills add rijans/agent-skills --skill cloudflare-email-workers
 npx skills add rijans/agent-skills --skill openauth
 npx skills add rijans/agent-skills --skill discord-activities
 npx skills add rijans/agent-skills --skill telegram-serverless-bot
@@ -46,6 +48,7 @@ Register this repository as a Claude Code plugin marketplace and install skills 
 
 ```text
 /plugin marketplace add rijans/agent-skills
+/plugin install cloudflare-email-workers@rijans-agent-skills
 /plugin install openauth@rijans-agent-skills
 /plugin install discord-activities@rijans-agent-skills
 /plugin install telegram-serverless-bot@rijans-agent-skills
@@ -83,6 +86,17 @@ skills/
 │       ├── providers-and-ui.md
 │       ├── client-and-session.md
 │       ├── storage-and-deployment.md
+│       └── sources.md
+├── cloudflare-email-workers/
+│   ├── SKILL.md
+│   ├── eval.md
+│   ├── agents/
+│   │   └── openai.yaml
+│   └── references/
+│       ├── routing-and-handlers.md
+│       ├── inbound-mime-parsing.md
+│       ├── outbound-and-replies.md
+│       ├── security-and-spam.md
 │       └── sources.md
 ├── humanize-text/
 │   ├── SKILL.md
@@ -173,6 +187,18 @@ Deploy self-hosted OAuth 2.0 and OIDC authentication servers across Cloudflare W
 - **Multi-Cloud Storage & Serverless Adapters**: Global edge persistence with `CloudflareStorage` (KV), AWS deployments with `DynamoStorage`, and zero-config local testing with `MemoryStorage`.
 
 See [the skill](skills/openauth/SKILL.md) and its [examples](examples/openauth/) for details.
+
+## Cloudflare Email Workers
+
+Build, deploy, and test serverless email routing and AI auto-response workers directly on [Cloudflare Email Routing](https://developers.cloudflare.com/email-routing/):
+
+- **Inbound Event Interception**: Native `email(message, env, ctx)` handler processing incoming messages at global edge latency with `message.forward()` and `message.setReject()`.
+- **MIME Parsing in V8 Isolates**: Browser/Workers-native MIME and RFC 5322 parsing via `postal-mime` without heavy Node stream dependencies.
+- **R2 Attachment Archiving**: Safe memory-bounded attachment streaming directly to Cloudflare R2 object storage.
+- **RFC 5322 Threaded Replies**: Proper conversation threading (`In-Reply-To`, `References`, `Re: ` subject) via `mimetext` and outbound dispatch via `cloudflare:email` and the `send_email` binding.
+- **Spam & Loop Protection**: Built-in guardrails checking `Auto-Submitted`, `Precedence`, automated sender filters (`mailer-daemon@`, `no-reply@`), SPF/DKIM verification, and prompt injection isolation.
+
+See [the skill](skills/cloudflare-email-workers/SKILL.md) and its [examples](examples/cloudflare-email-workers/) for details.
 
 ## Adding a skill
 

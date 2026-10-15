@@ -1,6 +1,6 @@
 {
   "name": "rijans-agent-skills",
-  "description": "Portable Agent Skills for AI coding agents, editors, and assistants — including openauth, discord-activities, telegram-serverless-bot, use-telegram-serverless, and humanize-text.",
+  "description": "Portable Agent Skills for AI coding agents, editors, and assistants — including cloudflare-email-workers, openauth, discord-activities, telegram-serverless-bot, use-telegram-serverless, and humanize-text.",
   "version": "1.3.0",
   "author": {
     "name": "Jaber Al Nahian",
@@ -12,6 +12,9 @@
   "keywords": [
     "agent-skills",
     "skill-md",
+    "cloudflare-email-workers",
+    "cloudflare-email",
+    "postal-mime",
     "openauth",
     "oauth2",
     "oidc",

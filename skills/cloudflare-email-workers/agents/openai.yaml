@@ -1,0 +1,5 @@
+interface:
+  display_name: "Cloudflare Email Workers"
+  short_description: "Build serverless email routing and AI auto-response workers with postal-mime, mimetext, and cloudflare:email"
+  default_prompt: |
+    Use Cloudflare Email Workers to build, configure, test, or deploy this inbound email processing, postal-mime parsing, R2 attachment, or threaded auto-reply task.

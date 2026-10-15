@@ -34,6 +34,12 @@
       "description": "Deploy self-hosted OAuth2 and OIDC servers with OpenAuth, createSubjects schemas, prebuilt PasswordUI and CodeUI, and cross-framework client verification."
     },
     {
+      "name": "cloudflare-email-workers",
+      "source": "./skills/cloudflare-email-workers",
+      "skills": "./",
+      "description": "Build, deploy, and test Cloudflare Email Routing Workers with postal-mime MIME parsing, RFC 5322 mimetext replies, and AI auto-response loops."
+    },
+    {
       "name": "humanize-text",
       "source": "./skills/humanize-text",
       "skills": "./",
