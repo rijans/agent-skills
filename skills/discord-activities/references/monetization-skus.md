@@ -62,6 +62,32 @@ export async function checkUserEntitlements(discordSdk: DiscordSDK, skuId: strin
 }
 ```
 
+### Listening for Real-Time Entitlement Grants
+
+When a user completes a checkout modal, Discord fires an `ENTITLEMENT_CREATE` event directly to the Activity:
+
+```typescript
+import { DiscordSDK, Events } from "@discord/embedded-app-sdk";
+
+export async function setupEntitlementListener(
+  discordSdk: DiscordSDK,
+  onGrant: (entitlement: any) => void
+) {
+  const handler = ({ entitlement }: { entitlement: any }) => {
+    console.log("Entitlement received in real time:", entitlement);
+    onGrant(entitlement);
+  };
+
+  // Subscribe to real-time purchase updates
+  await discordSdk.subscribe(Events.ENTITLEMENT_CREATE, handler);
+
+  // Return cleanup function to unsubscribe on unmount
+  return async () => {
+    await discordSdk.unsubscribe(Events.ENTITLEMENT_CREATE, handler);
+  };
+}
+```
+
 ---
 
 ## 4. Server-Side Verification & Consuming Consumables

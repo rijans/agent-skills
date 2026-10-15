@@ -29,22 +29,32 @@ export async function fetchParticipants(discordSdk: DiscordSDK) {
 
 ## 2. Listening to Live Participant Updates
 
-To keep the UI in sync when users join or leave the voice channel Activity:
+To keep the UI in sync when users join or leave the voice channel Activity, use `Events.ACTIVITY_INSTANCE_PARTICIPANTS_UPDATE`:
 
 ```typescript
-export function subscribeToParticipants(
+import { DiscordSDK, Events } from "@discord/embedded-app-sdk";
+
+export async function setupParticipantListener(
   discordSdk: DiscordSDK,
   onUpdate: (participants: any[]) => void
 ) {
-  // Subscribe to instance participant changes
-  const unsubscribe = discordSdk.subscribe(
-    "ACTIVITY_INSTANCE_PARTICIPANTS_UPDATE",
-    ({ participants }) => {
-      onUpdate(participants);
-    }
+  const handler = ({ participants }: { participants: any[] }) => {
+    onUpdate(participants);
+  };
+
+  // 1. Subscribe to instance participant changes
+  await discordSdk.subscribe(
+    Events.ACTIVITY_INSTANCE_PARTICIPANTS_UPDATE,
+    handler
   );
 
-  return unsubscribe; // Call to unhook listener
+  // 2. Return an unhook function that cleans up the listener
+  return async () => {
+    await discordSdk.unsubscribe(
+      Events.ACTIVITY_INSTANCE_PARTICIPANTS_UPDATE,
+      handler
+    );
+  };
 }
 ```
 
@@ -52,37 +62,34 @@ export function subscribeToParticipants(
 
 ## 3. Real-Time Speaking Indicators
 
-Displaying a glowing green ring around active speakers is a signature Discord UI pattern:
+Displaying a glowing green ring around active speakers is a signature Discord UI pattern. Subscribe to `Events.SPEAKING_START` and `Events.SPEAKING_STOP` with the channel ID:
 
 ```typescript
-export function setupSpeakingIndicators(
+import { DiscordSDK, Events } from "@discord/embedded-app-sdk";
+
+export async function setupSpeakingIndicators(
   discordSdk: DiscordSDK,
   onSpeakingChange: (userId: string, isSpeaking: boolean) => void
 ) {
   const channelId = discordSdk.channelId;
-  if (!channelId) return;
+  if (!channelId) return () => {};
 
-  // 1. User starts speaking
-  const unsubStart = discordSdk.subscribe(
-    "SPEAKING_START",
-    ({ user_id }) => {
-      onSpeakingChange(user_id, true);
-    },
-    { channel_id: channelId }
-  );
+  const handleStart = ({ user_id }: { user_id: string }) => {
+    onSpeakingChange(user_id, true);
+  };
 
-  // 2. User stops speaking
-  const unsubStop = discordSdk.subscribe(
-    "SPEAKING_STOP",
-    ({ user_id }) => {
-      onSpeakingChange(user_id, false);
-    },
-    { channel_id: channelId }
-  );
+  const handleStop = ({ user_id }: { user_id: string }) => {
+    onSpeakingChange(user_id, false);
+  };
 
-  return () => {
-    unsubStart.then((unsub) => unsub());
-    unsubStop.then((unsub) => unsub());
+  // 1. Subscribe with channel_id scope
+  await discordSdk.subscribe(Events.SPEAKING_START, handleStart, { channel_id: channelId });
+  await discordSdk.subscribe(Events.SPEAKING_STOP, handleStop, { channel_id: channelId });
+
+  // 2. Return cleanup function
+  return async () => {
+    await discordSdk.unsubscribe(Events.SPEAKING_START, handleStart);
+    await discordSdk.unsubscribe(Events.SPEAKING_STOP, handleStop);
   };
 }
 ```
@@ -95,7 +102,7 @@ Construct Discord CDN image URLs based on the user's avatar hash:
 
 ```typescript
 export function getUserAvatarUrl(user: { id: string; avatar?: string | null; discriminator?: string }): string {
-  // Custom uploaded avatar
+  // Custom uploaded avatar (handles animated GIFs and static WEBP)
   if (user.avatar) {
     const isAnimated = user.avatar.startsWith("a_");
     const format = isAnimated ? "gif" : "webp";

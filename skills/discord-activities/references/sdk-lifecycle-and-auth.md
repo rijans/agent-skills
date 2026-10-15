@@ -159,3 +159,40 @@ export async function initializeApp() {
   return auth;
 }
 ```
+
+---
+
+## 5. Mobile Viewport & Platform Detection (`discordSdk.platform`)
+
+Discord Activities run across **Desktop (Electron)**, **Web (Chrome/Firefox/Safari)**, and **Mobile (iOS & Android Discord app WebViews)**.
+
+Inspect `discordSdk.platform` after `ready()`:
+
+```typescript
+console.log("Current platform:", discordSdk.platform); // "desktop" | "web" | "mobile"
+```
+
+### Mobile WebView Gotchas & CSS Fixes
+
+On mobile devices, running inside the Discord WebView introduces three common traps:
+1. **Dynamic URL/Address bar resizing**: Using `100vh` causes content to be cut off or jump when browser chrome toggles. Use `100dvh` or `100%`.
+2. **Rubberband Bounce / Overscroll**: Swiping can accidentally drag the entire Discord Activity iframe or trigger parent page refresh. Add `overscroll-behavior: none;`.
+3. **Double-tap Zoom & Touch Delays**: Mobile WebViews may delay tap events by 300ms. Set `touch-action: manipulation;`.
+
+Recommended root CSS reset for Discord Activities:
+
+```css
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100dvh;
+  /* Prevent bounce & accidental frame scrolling on iOS / Android */
+  overscroll-behavior: none;
+  touch-action: manipulation;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  box-sizing: border-box;
+}
+```

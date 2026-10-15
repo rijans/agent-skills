@@ -1,6 +1,6 @@
 # Proxy Routing and Content Security Policy (`/.proxy/`)
 
-This reference explains how Discord's sandboxed reverse proxy (`/.proxy/`) works, how to configure URL Mappings in the Developer Portal, and how to verify proxy signatures.
+This reference explains how Discord's sandboxed reverse proxy (`/.proxy/`) works, how to configure URL Mappings in the Developer Portal, how to use `patchUrlMappings`, and how to verify proxy signatures.
 
 ---
 
@@ -65,7 +65,38 @@ const response = await fetch(getApiUrl("/api/token"), {
 
 ---
 
-## 4. Cryptographic Proxy Header Verification (Ed25519)
+## 4. Automatic URL Rewriting with `patchUrlMappings`
+
+When using third-party libraries (e.g. game engines, Socket.io, Firebase, or external API clients) that make hardcoded fetches or open WebSockets to external domains, use the `patchUrlMappings` utility from `@discord/embedded-app-sdk`.
+
+This utility monkey-patches `window.fetch`, `window.WebSocket`, and `XMLHttpRequest` at runtime so calls to target domains automatically route through the configured proxy prefix:
+
+```typescript
+import { patchUrlMappings } from "@discord/embedded-app-sdk";
+
+// Call early in your application entrypoint before initializing other libraries
+patchUrlMappings(
+  [
+    {
+      prefix: "/.proxy/api",
+      target: "my-game-backend.com/api",
+    },
+    {
+      prefix: "/.proxy/ws",
+      target: "my-game-backend.com/ws",
+    },
+  ],
+  {
+    patchFetch: true,      // Intercepts window.fetch (default: true)
+    patchWebSocket: true,  // Intercepts window.WebSocket (default: true)
+    patchXhr: true,        // Intercepts XMLHttpRequest (default: true)
+  }
+);
+```
+
+---
+
+## 5. Cryptographic Proxy Header Verification (Ed25519)
 
 When Discord's proxy forwards an HTTP request to your backend, it appends signature headers:
 - `X-Signature-Ed25519`: Hex-encoded Ed25519 signature.

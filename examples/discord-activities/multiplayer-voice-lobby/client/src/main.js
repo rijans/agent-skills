@@ -1,4 +1,4 @@
-import { DiscordSDK } from "@discord/embedded-app-sdk";
+import { DiscordSDK, Events } from "@discord/embedded-app-sdk";
 
 const CLIENT_ID = import.meta.env?.VITE_DISCORD_CLIENT_ID || "123456789012345678";
 const discordSdk = new DiscordSDK(CLIENT_ID);
@@ -115,19 +115,19 @@ async function startLobby() {
   renderParticipants();
 
   // 4. Subscribe to Participant Changes
-  discordSdk.subscribe("ACTIVITY_INSTANCE_PARTICIPANTS_UPDATE", ({ participants }) => {
+  await discordSdk.subscribe(Events.ACTIVITY_INSTANCE_PARTICIPANTS_UPDATE, ({ participants }) => {
     activeParticipants = participants || [];
     renderParticipants();
   });
 
   // 5. Subscribe to Speaking Indicators
   if (discordSdk.channelId) {
-    discordSdk.subscribe("SPEAKING_START", ({ user_id }) => {
+    await discordSdk.subscribe(Events.SPEAKING_START, ({ user_id }) => {
       speakingUsers.add(user_id);
       renderParticipants();
     }, { channel_id: discordSdk.channelId });
 
-    discordSdk.subscribe("SPEAKING_STOP", ({ user_id }) => {
+    await discordSdk.subscribe(Events.SPEAKING_STOP, ({ user_id }) => {
       speakingUsers.delete(user_id);
       renderParticipants();
     }, { channel_id: discordSdk.channelId });
