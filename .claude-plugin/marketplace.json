@@ -55,6 +55,15 @@
       ]
     },
     {
+      "name": "mtcute",
+      "description": "Build high-performance Telegram userbots and MTProto client apps using @mtcute/node, @mtcute/dispatcher, SQLite sessions, and typed raw TL calls.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/mtcute"
+      ]
+    },
+    {
       "name": "humanize-text",
       "description": "Write and rewrite natural, specific, human-sounding prose while preserving voice, meaning, nuance, and facts.",
       "source": "./",

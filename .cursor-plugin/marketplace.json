@@ -40,6 +40,12 @@
       "description": "Build, deploy, and test Cloudflare Email Routing Workers with postal-mime MIME parsing, RFC 5322 mimetext replies, and AI auto-response loops."
     },
     {
+      "name": "mtcute",
+      "source": "./skills/mtcute",
+      "skills": "./",
+      "description": "Build high-performance Telegram userbots and MTProto client apps using @mtcute/node, @mtcute/dispatcher, SQLite sessions, and typed raw TL calls."
+    },
+    {
       "name": "humanize-text",
       "source": "./skills/humanize-text",
       "skills": "./",

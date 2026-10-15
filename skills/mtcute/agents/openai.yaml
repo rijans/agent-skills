@@ -1,0 +1,5 @@
+interface:
+  display_name: "mtcute (MTProto Userbots & Client)"
+  short_description: "Build high-performance Telegram userbots, client automation, and raw TL calls with mtcute"
+  default_prompt: |
+    Use mtcute to build, configure, test, or debug this Telegram userbot, client automation, 2GB+ media streaming, or raw MTProto TL task.

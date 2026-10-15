@@ -1,0 +1,15 @@
+{
+  "name": "mtcute-channel-media-archiver",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "High-performance streaming Telegram channel media archiver using mtcute",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "dependencies": {
+    "@mtcute/dispatcher": "^0.22.0",
+    "@mtcute/node": "^0.22.0",
+    "dotenv": "^16.4.7"
+  }
+}

@@ -19,6 +19,7 @@ Skills in this repository are designed to be useful across tools that support th
 | [telegram-serverless-bot](skills/telegram-serverless-bot/) | Build, ship, and test Telegram bots on Telegram Serverless with V8 JS, SQLite sessions (`sdk/db`), interactive keyboards, and Telegram Stars (`XTR`). |
 | [openauth](skills/openauth/) | Deploy self-hosted OAuth2 and OIDC servers with OpenAuth, createSubjects schemas, prebuilt PasswordUI and CodeUI, and cross-framework client verification. |
 | [cloudflare-email-workers](skills/cloudflare-email-workers/) | Build, deploy, and test Cloudflare Email Routing Workers with postal-mime MIME parsing, RFC 5322 mimetext replies, and AI auto-response loops. |
+| [mtcute](skills/mtcute/) | Build high-performance Telegram userbots and MTProto client apps using @mtcute/node, @mtcute/dispatcher, SQLite sessions, and typed raw TL calls. |
 | [discord-activities](skills/discord-activities/) | Build, ship, and test Discord Activities with @discord/embedded-app-sdk, OAuth2 token exchange, /.proxy/ CSP routing, and voice channel presence. |
 
 ## Install
@@ -34,6 +35,7 @@ npx skills add rijans/agent-skills
 Or install a specific skill:
 
 ```bash
+npx skills add rijans/agent-skills --skill mtcute
 npx skills add rijans/agent-skills --skill cloudflare-email-workers
 npx skills add rijans/agent-skills --skill openauth
 npx skills add rijans/agent-skills --skill discord-activities
@@ -48,6 +50,7 @@ Register this repository as a Claude Code plugin marketplace and install skills 
 
 ```text
 /plugin marketplace add rijans/agent-skills
+/plugin install mtcute@rijans-agent-skills
 /plugin install cloudflare-email-workers@rijans-agent-skills
 /plugin install openauth@rijans-agent-skills
 /plugin install discord-activities@rijans-agent-skills
@@ -97,6 +100,17 @@ skills/
 │       ├── inbound-mime-parsing.md
 │       ├── outbound-and-replies.md
 │       ├── security-and-spam.md
+│       └── sources.md
+├── mtcute/
+│   ├── SKILL.md
+│   ├── eval.md
+│   ├── agents/
+│   │   └── openai.yaml
+│   └── references/
+│       ├── client-and-auth.md
+│       ├── dispatcher-and-filters.md
+│       ├── media-and-files.md
+│       ├── raw-tl-and-errors.md
 │       └── sources.md
 ├── humanize-text/
 │   ├── SKILL.md
@@ -199,6 +213,18 @@ Build, deploy, and test serverless email routing and AI auto-response workers di
 - **Spam & Loop Protection**: Built-in guardrails checking `Auto-Submitted`, `Precedence`, automated sender filters (`mailer-daemon@`, `no-reply@`), SPF/DKIM verification, and prompt injection isolation.
 
 See [the skill](skills/cloudflare-email-workers/SKILL.md) and its [examples](examples/cloudflare-email-workers/) for details.
+
+## mtcute
+
+Build high-performance Telegram userbots, client automations, and MTProto applications using [`@mtcute/node`](https://www.npmjs.com/package/@mtcute/node) and [`@mtcute/dispatcher`](https://www.npmjs.com/package/@mtcute/dispatcher):
+
+- **Modern GramJS Successor**: Zero legacy C++ compilation or unmaintained dependencies—pure TypeScript running across Node.js, Bun, Deno, and Web Workers.
+- **SQLite Session Persistence**: Out-of-the-box persistent auth keys and peer entity caching (`data/userbot.session`), with base64 session string export (`exportSession()`) for ephemeral container environments.
+- **High-Performance Event Dispatcher**: Declarative filter composition (`filters.command`, `filters.regex`, `filters.chat`, `filters.and`/`or`/`not`) for commands, message edits, deletions, and inline callbacks.
+- **2GB+ Streaming Media Pipeline**: Memory-safe large file transfers up to 2GB (or 4GB for Telegram Premium) via `tg.downloadToFile()` and `tg.downloadAsStream()` with zero heap exhaustion.
+- **Raw MTProto Type Language (TL) Calls**: Direct low-level RPC queries (`tg.call({ _: '...' })`) with strict schema typing, automatic access hash caching (`resolvePeer`), and transparent `FLOOD_WAIT` backoff (`floodSleepThreshold`).
+
+See [the skill](skills/mtcute/SKILL.md) and its [examples](examples/mtcute/) for details.
 
 ## Adding a skill
 

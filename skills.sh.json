@@ -4,10 +4,11 @@
   "groupings": [
     {
       "title": "Telegram & Cloud Engineering",
-      "description": "Build, ship, and scale simple or full-stack Telegram bots and Mini Apps on Telegram Serverless with V8 JS, SQLite, and tgcloud.",
+      "description": "Build, ship, and scale Telegram bots, Mini Apps, and MTProto userbots with V8 JS, SQLite, tgcloud, and mtcute.",
       "skills": [
         "use-telegram-serverless",
-        "telegram-serverless-bot"
+        "telegram-serverless-bot",
+        "mtcute"
       ]
     },
     {
