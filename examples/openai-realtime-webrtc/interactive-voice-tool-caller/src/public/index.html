@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OpenAI Realtime WebRTC with Function Calling</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-layout">
+    <div class="card main-card">
+      <header class="header">
+        <div class="status-pill" id="statusPill">Disconnected</div>
+        <h1>Interactive Voice Agent</h1>
+        <p class="subtitle">Speech-to-speech with client DOM tools & backend database lookups</p>
+      </header>
+
+      <div class="visualizer-wrapper">
+        <canvas id="waveformCanvas" width="400" height="80"></canvas>
+      </div>
+
+      <div class="controls">
+        <button id="connectBtn" class="btn btn-primary">Start Agent</button>
+        <button id="disconnectBtn" class="btn btn-danger" disabled>Disconnect</button>
+      </div>
+
+      <div class="transcript-container">
+        <h3>Live Voice Log</h3>
+        <div id="transcriptFeed" class="transcript-feed">
+          <p class="placeholder-text">Click "Start Agent" and ask: <em>"Can you change the theme to cyberpunk?"</em> or <em>"What is the status of flight AA-100?"</em></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card sidebar-card">
+      <h3>Active Tools & Data</h3>
+      <div class="tool-demo-block">
+        <h4>1. Client-Side Tool (`change_theme`)</h4>
+        <p class="desc">Say: <em>"Switch to dark mode"</em> or <em>"Make it cyberpunk"</em></p>
+        <div class="theme-badge">Active Theme: <span id="currentThemeLabel">dark</span></div>
+      </div>
+
+      <div class="tool-demo-block">
+        <h4>2. Backend Database Tool (`check_flight_status`)</h4>
+        <p class="desc">Say: <em>"Check flight AA-100"</em> or <em>"Status of DL-882"</em></p>
+        <div id="flightCard" class="flight-card">
+          <div class="flight-status-text">No active flight query yet</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="client.js"></script>
+</body>
+</html>

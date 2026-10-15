@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OpenAI Realtime WebRTC Voice Assistant</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="card">
+    <header class="header">
+      <div class="status-pill" id="statusPill">Disconnected</div>
+      <h1>Realtime Voice Assistant</h1>
+      <p class="subtitle">Direct browser-to-OpenAI WebRTC speech-to-speech with gpt-4o-realtime-preview</p>
+    </header>
+
+    <div class="controls">
+      <button id="connectBtn" class="btn btn-primary">Connect Voice</button>
+      <button id="disconnectBtn" class="btn btn-danger" disabled>Disconnect</button>
+      <button id="micToggleBtn" class="btn btn-secondary" disabled>Mute Mic</button>
+    </div>
+
+    <div class="transcript-container">
+      <h3>Live Transcript</h3>
+      <div id="transcriptFeed" class="transcript-feed">
+        <p class="placeholder-text">Click "Connect Voice" and speak into your microphone...</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="client.js"></script>
+</body>
+</html>

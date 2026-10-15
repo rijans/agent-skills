@@ -1,0 +1,5 @@
+interface:
+  display_name: "OpenAI Realtime WebRTC (Voice AI Agents)"
+  short_description: "Build sub-300ms speech-to-speech voice agents with OpenAI Realtime API over WebRTC"
+  default_prompt: |
+    Use OpenAI Realtime WebRTC to build, configure, test, or debug this voice AI assistant, ephemeral session flow, data channel tool, or audio visualizer.

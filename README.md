@@ -22,6 +22,7 @@ Skills in this repository are designed to be useful across tools that support th
 | [mtcute](skills/mtcute/) | Build high-performance Telegram userbots and MTProto client apps using @mtcute/node, @mtcute/dispatcher, SQLite sessions, and typed raw TL calls. |
 | [duckdb-wasm](skills/duckdb-wasm/) | Query Parquet files, run in-browser analytical SQL, and persist databases to OPFS with @duckdb/duckdb-wasm, Web Workers, and Apache Arrow tables. |
 | [restate-sdk](skills/restate-sdk/) | Build resilient sagas, durable workflows, and stateful virtual objects with @restatedev/restate-sdk, deterministic journaling, and awakeable promises. |
+| [openai-realtime-webrtc](skills/openai-realtime-webrtc/) | Build low-latency voice AI agents with OpenAI Realtime API over WebRTC, ephemeral session tokens, RTCPeerConnection audio, and data channel tools. |
 | [discord-activities](skills/discord-activities/) | Build, ship, and test Discord Activities with @discord/embedded-app-sdk, OAuth2 token exchange, reverse proxy CSP routing, and voice channel presence. |
 
 ## Install
@@ -37,6 +38,7 @@ npx skills add rijans/agent-skills
 Or install a specific skill:
 
 ```bash
+npx skills add rijans/agent-skills --skill openai-realtime-webrtc
 npx skills add rijans/agent-skills --skill restate-sdk
 npx skills add rijans/agent-skills --skill duckdb-wasm
 npx skills add rijans/agent-skills --skill mtcute
@@ -54,6 +56,7 @@ Register this repository as a Claude Code plugin marketplace and install skills 
 
 ```text
 /plugin marketplace add rijans/agent-skills
+/plugin install openai-realtime-webrtc@rijans-agent-skills
 /plugin install restate-sdk@rijans-agent-skills
 /plugin install duckdb-wasm@rijans-agent-skills
 /plugin install mtcute@rijans-agent-skills
@@ -141,6 +144,18 @@ skills/
 │       ├── awakeables-and-signals.md
 │       ├── error-handling-and-retries.md
 │       ├── endpoints-and-deployment.md
+│       └── sources.md
+├── openai-realtime-webrtc/
+│   ├── SKILL.md
+│   ├── eval.md
+│   ├── agents/
+│   │   └── openai.yaml
+│   └── references/
+│       ├── session-and-ephemeral-tokens.md
+│       ├── webrtc-handshake-and-media.md
+│       ├── events-and-data-channel.md
+│       ├── tools-and-function-calling.md
+│       ├── audio-visualization-and-state.md
 │       └── sources.md
 ├── humanize-text/
 │   ├── SKILL.md
@@ -281,6 +296,19 @@ Build resilient distributed applications, durable sagas, and stateful virtual ob
 - **Dual Error Model**: Clean segregation between transient errors (indefinite exponential backoff) and permanent `TerminalError` failures (stopping retry storms).
 
 See [the skill](skills/restate-sdk/SKILL.md) and its [examples](examples/restate-sdk/) for details.
+
+## OpenAI Realtime WebRTC
+
+Build sub-300ms speech-to-speech conversational voice AI applications and agents with the [OpenAI Realtime API over WebRTC](https://platform.openai.com/docs/guides/realtime-webrtc):
+
+- **Zero Master Key Leakage**: Secure backend session minting (`/v1/realtime/sessions`) that distributes short-lived ephemeral client tokens (`client_secret.value`) to browsers.
+- **Direct Edge WebRTC Streaming**: Direct `RTCPeerConnection` P2P media audio streaming to OpenAI's edge infrastructure without proxying voice packets through backend servers.
+- **Hardware Echo Cancellation**: Strict media stream constraints (`echoCancellation: true`, `noiseSuppression: true`, `autoGainControl: true`) preventing destructive speaker-to-mic feedback loops.
+- **Turn Detection & Instant Barge-In**: Server VAD (`server_vad`) with programmatic interruption truncation (`input_audio_buffer.speech_started` and `conversation.item.truncate`) alongside Push-to-Talk controls.
+- **Bidirectional Function Calling**: Execute in-browser DOM/UI manipulations or backend database queries over the `oai-events` data channel with proper `response.create` re-prompt sequencing.
+- **Live Waveform Visualizers**: Native Web Audio API frequency analysis (`AnalyserNode`) and dynamic conversational state machines (Listening, Thinking, Speaking).
+
+See [the skill](skills/openai-realtime-webrtc/SKILL.md) and its [examples](examples/openai-realtime-webrtc/) for details.
 
 ## Adding a skill
 

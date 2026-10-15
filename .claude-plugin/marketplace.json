@@ -6,9 +6,18 @@
   },
   "metadata": {
     "description": "Portable Agent Skills for AI coding agents, editors, and assistants — built for practical, reusable engineering and editorial workflows.",
-    "version": "1.7.0"
+    "version": "1.8.0"
   },
   "plugins": [
+    {
+      "name": "openai-realtime-webrtc",
+      "description": "Build low-latency voice AI agents with OpenAI Realtime API over WebRTC, ephemeral session tokens, RTCPeerConnection audio, and data channel tools.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/openai-realtime-webrtc"
+      ]
+    },
     {
       "name": "restate-sdk",
       "description": "Build resilient sagas, durable workflows, and stateful virtual objects with @restatedev/restate-sdk, deterministic journaling, and awakeable promises.",

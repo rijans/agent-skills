@@ -47,6 +47,13 @@
       ]
     },
     {
+      "title": "Real-Time AI & Voice Agents",
+      "description": "Build sub-300ms speech-to-speech voice AI agents and bidirectional event tools with OpenAI Realtime API over WebRTC and ephemeral sessions.",
+      "skills": [
+        "openai-realtime-webrtc"
+      ]
+    },
+    {
       "title": "Writing & Editorial",
       "description": "Write and rewrite natural, human-authored prose across articles, technical guides, and documentation while preserving voice, meaning, and nuance.",
       "skills": [
