@@ -6,9 +6,15 @@
   },
   "metadata": {
     "description": "Portable Agent Skills for AI coding agents, editors, and assistants — built for practical, reusable engineering and editorial workflows.",
-    "version": "1.6.1"
+    "version": "1.7.0"
   },
   "plugins": [
+    {
+      "name": "restate-sdk",
+      "source": "./skills/restate-sdk",
+      "skills": "./",
+      "description": "Build resilient sagas, durable workflows, and stateful virtual objects with @restatedev/restate-sdk, deterministic journaling, and awakeable promises."
+    },
     {
       "name": "use-telegram-serverless",
       "source": "./skills/use-telegram-serverless",

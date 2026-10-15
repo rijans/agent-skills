@@ -40,6 +40,13 @@
       ]
     },
     {
+      "title": "Durable Execution & Workflows",
+      "description": "Build resilient distributed sagas, long-running workflows, and stateful virtual objects with @restatedev/restate-sdk and deterministic journaling.",
+      "skills": [
+        "restate-sdk"
+      ]
+    },
+    {
       "title": "Writing & Editorial",
       "description": "Write and rewrite natural, human-authored prose across articles, technical guides, and documentation while preserving voice, meaning, and nuance.",
       "skills": [

@@ -1,0 +1,12 @@
+{
+  "name": "restate-human-in-the-loop-example",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "dependencies": {
+    "@restatedev/restate-sdk": "^1.1.0"
+  }
+}

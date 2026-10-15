@@ -6,9 +6,18 @@
   },
   "metadata": {
     "description": "Portable Agent Skills for AI coding agents, editors, and assistants — built for practical, reusable engineering and editorial workflows.",
-    "version": "1.6.1"
+    "version": "1.7.0"
   },
   "plugins": [
+    {
+      "name": "restate-sdk",
+      "description": "Build resilient sagas, durable workflows, and stateful virtual objects with @restatedev/restate-sdk, deterministic journaling, and awakeable promises.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/restate-sdk"
+      ]
+    },
     {
       "name": "use-telegram-serverless",
       "description": "Build, ship, and scale simple or full-stack Telegram bots and Mini Apps on Telegram Serverless with V8 JS, SQLite (sdk/db), Mini App RPC, and tgcloud.",

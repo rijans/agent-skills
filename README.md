@@ -21,6 +21,7 @@ Skills in this repository are designed to be useful across tools that support th
 | [cloudflare-email-workers](skills/cloudflare-email-workers/) | Build, deploy, and test Cloudflare Email Routing Workers with postal-mime MIME parsing, RFC 5322 mimetext replies, and AI auto-response loops. |
 | [mtcute](skills/mtcute/) | Build high-performance Telegram userbots and MTProto client apps using @mtcute/node, @mtcute/dispatcher, SQLite sessions, and typed raw TL calls. |
 | [duckdb-wasm](skills/duckdb-wasm/) | Query Parquet files, run in-browser analytical SQL, and persist databases to OPFS with @duckdb/duckdb-wasm, Web Workers, and Apache Arrow tables. |
+| [restate-sdk](skills/restate-sdk/) | Build resilient sagas, durable workflows, and stateful virtual objects with @restatedev/restate-sdk, deterministic journaling, and awakeable promises. |
 | [discord-activities](skills/discord-activities/) | Build, ship, and test Discord Activities with @discord/embedded-app-sdk, OAuth2 token exchange, reverse proxy CSP routing, and voice channel presence. |
 
 ## Install
@@ -36,6 +37,7 @@ npx skills add rijans/agent-skills
 Or install a specific skill:
 
 ```bash
+npx skills add rijans/agent-skills --skill restate-sdk
 npx skills add rijans/agent-skills --skill duckdb-wasm
 npx skills add rijans/agent-skills --skill mtcute
 npx skills add rijans/agent-skills --skill cloudflare-email-workers
@@ -52,6 +54,7 @@ Register this repository as a Claude Code plugin marketplace and install skills 
 
 ```text
 /plugin marketplace add rijans/agent-skills
+/plugin install restate-sdk@rijans-agent-skills
 /plugin install duckdb-wasm@rijans-agent-skills
 /plugin install mtcute@rijans-agent-skills
 /plugin install cloudflare-email-workers@rijans-agent-skills
@@ -126,6 +129,18 @@ skills/
 │       ├── opfs-persistence.md
 │       ├── queries-and-arrow.md
 │       ├── security-and-injection.md
+│       └── sources.md
+├── restate-sdk/
+│   ├── SKILL.md
+│   ├── eval.md
+│   ├── agents/
+│   │   └── openai.yaml
+│   └── references/
+│       ├── services-and-virtual-objects.md
+│       ├── workflows-and-sagas.md
+│       ├── awakeables-and-signals.md
+│       ├── error-handling-and-retries.md
+│       ├── endpoints-and-deployment.md
 │       └── sources.md
 ├── humanize-text/
 │   ├── SKILL.md
@@ -254,6 +269,18 @@ Execute blazing-fast analytical SQL directly inside web browsers using [`@duckdb
 - **Cross-Origin Isolation Management**: Graceful fallback to the single-threaded `eh` bundle, with opt-in multi-threading (`pthreadWorker`) enabled via COOP/COEP headers.
 
 See [the skill](skills/duckdb-wasm/SKILL.md) and its [examples](examples/duckdb-wasm/) for details.
+
+## Restate SDK
+
+Build resilient distributed applications, durable sagas, and stateful virtual objects across Node.js, Bun, Cloudflare Workers, and AWS Lambda—powered by [`@restatedev/restate-sdk`](https://www.npmjs.com/package/@restatedev/restate-sdk):
+
+- **Deterministic Journaling & Zero Replay Divergence**: Isolate non-deterministic operations (`Date.now()`, `Math.random()`, external HTTP fetches) inside `ctx.run()` to guarantee reliable crash-recovery replays.
+- **Resilient Distributed Sagas**: Clean multi-step transactional orchestrations with LIFO compensation stacks (`compensations.reverse()`), ensuring rollback reliability when intermediate operations fail.
+- **Stateful Virtual Objects (`restate.object`)**: Distributed actor-like entities with single-writer concurrency guarantees, persistent key-value storage (`ctx.get`, `ctx.set`, `ctx.clear`), and race-free state transitions.
+- **Human-in-the-Loop & Awakeables**: Long-running suspensions waiting for human approvals or external webhook callbacks via `ctx.awakeable()`, with zero CPU consumption during suspensions and durable timeout fallbacks.
+- **Dual Error Model**: Clean segregation between transient errors (indefinite exponential backoff) and permanent `TerminalError` failures (stopping retry storms).
+
+See [the skill](skills/restate-sdk/SKILL.md) and its [examples](examples/restate-sdk/) for details.
 
 ## Adding a skill
 

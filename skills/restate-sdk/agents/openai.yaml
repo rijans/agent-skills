@@ -1,0 +1,5 @@
+interface:
+  display_name: "Restate SDK (Durable Workflows & Sagas)"
+  short_description: "Build resilient sagas, durable execution workflows, and virtual objects with Restate"
+  default_prompt: |
+    Use Restate SDK to build, configure, test, or debug this durable workflow, payment saga, virtual object, or awakeable task.
