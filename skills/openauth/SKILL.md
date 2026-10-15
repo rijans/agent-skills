@@ -1,6 +1,6 @@
 ---
 name: openauth
-description: Deploy self-hosted OAuth2 and OIDC servers with OpenAuth, createSubjects schemas, prebuilt PasswordUI and CodeUI, and cross-framework client verification. Use when building universal auth for Cloudflare Workers, Node.js, Bun, and AWS Lambda with @openauthjs/openauth, social logins, and secure session rotation.
+description: Deploy self-hosted OAuth2 and OIDC servers with OpenAuth, createSubjects schemas, prebuilt PasswordUI/CodeUI, and cross-framework client verification. Use when building universal auth for Cloudflare Workers, Node.js, Bun, and AWS Lambda with @openauthjs/openauth, social logins, and secure session rotation.
 license: MIT
 compatibility: Portable across Agent Skills hosts (Claude Code, Cursor, Codex, Antigravity, Gemini, GitHub Copilot, Windsurf, OpenCode, Cline). Supports Cloudflare Workers, Node.js >=18, Bun, and AWS Lambda with @openauthjs/openauth.
 metadata:

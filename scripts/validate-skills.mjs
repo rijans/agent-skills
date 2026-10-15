@@ -35,6 +35,16 @@ for (const skill of skillFolders) {
     continue;
   }
 
+  const evalMdPath = join(skillPath, "eval.md");
+  if (!existsSync(evalMdPath)) {
+    fail(`Missing eval.md in skills/${skill}/`);
+  }
+
+  const openaiYamlPath = join(skillPath, "agents", "openai.yaml");
+  if (!existsSync(openaiYamlPath)) {
+    fail(`Missing agents/openai.yaml in skills/${skill}/`);
+  }
+
   const content = readFileSync(skillMdPath, "utf8");
   const fmMatch = content.match(/^---\r?\n([\s\S]*?)\r?\n---/);
   if (!fmMatch) {
@@ -61,10 +71,11 @@ for (const skill of skillFolders) {
         `skills/${skill}/SKILL.md description exceeds 1024 chars (${desc.length})`
       );
     }
-    const firstSentence = desc.split(". ")[0] + ".";
-    if (firstSentence.length > 160) {
+    const firstSentenceMatch = desc.match(/^([^.!?]+[.!?])/);
+    const firstSentence = firstSentenceMatch ? firstSentenceMatch[1].trim() : desc;
+    if (firstSentence.length < 140 || firstSentence.length > 152) {
       fail(
-        `skills/${skill}/SKILL.md first sentence of description is ${firstSentence.length} chars (keep <= 155 chars for skills.sh/Google meta description)`
+        `skills/${skill}/SKILL.md first sentence of description is ${firstSentence.length} chars (must be 140–152 chars for skills.sh/Google meta description)`
       );
     }
   }

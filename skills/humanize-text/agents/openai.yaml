@@ -1,0 +1,5 @@
+interface:
+  display_name: "Humanize Text"
+  short_description: "Write and rewrite natural, human-sounding prose while preserving voice and intent"
+  default_prompt: |
+    Use Humanize Text to draft, edit, review, or refine this article, guide, documentation, product copy, or text to sound natural, specific, and human.

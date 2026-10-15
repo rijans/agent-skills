@@ -1,6 +1,6 @@
 ---
 name: humanize-text
-description: Write and rewrite natural, human-authored prose while preserving voice, meaning, nuance, and facts. Use when drafting, editing, or reviewing articles, blogs, documentation, READMEs, tutorials, technical explanations, product copy, release notes, social posts, or other prose that should sound specific, natural, and non-formulaic.
+description: Write and rewrite natural, human-authored prose across articles, technical guides, and documentation while preserving voice, meaning, and nuance. Use when drafting, editing, or reviewing articles, blogs, documentation, READMEs, tutorials, technical explanations, product copy, release notes, social posts, or other prose that should sound specific, natural, and non-formulaic.
 ---
 
 # Humanize Text

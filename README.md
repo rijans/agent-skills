@@ -14,14 +14,14 @@ Skills in this repository are designed to be useful across tools that support th
 
 | Skill | Description |
 | --- | --- |
-| [humanize-text](skills/humanize-text/) | Write and rewrite natural, specific, human-sounding prose while preserving voice, meaning, nuance, and facts. |
+| [humanize-text](skills/humanize-text/) | Write and rewrite natural, human-authored prose across articles, technical guides, and documentation while preserving voice, meaning, and nuance. |
 | [use-telegram-serverless](skills/use-telegram-serverless/) | Build, ship, and scale simple or full-stack Telegram bots and Mini Apps directly inside Telegram's cloud—powered by V8 JavaScript isolates, built-in SQLite (`sdk/db`), native Bot API & HTTP (`sdk/api`, `sdk/fetch`), static hosting, and `tgcloud`. |
 | [telegram-serverless-bot](skills/telegram-serverless-bot/) | Build, ship, and test Telegram bots on Telegram Serverless with V8 JS, SQLite sessions (`sdk/db`), interactive keyboards, and Telegram Stars (`XTR`). |
 | [openauth](skills/openauth/) | Deploy self-hosted OAuth2 and OIDC servers with OpenAuth, createSubjects schemas, prebuilt PasswordUI and CodeUI, and cross-framework client verification. |
 | [cloudflare-email-workers](skills/cloudflare-email-workers/) | Build, deploy, and test Cloudflare Email Routing Workers with postal-mime MIME parsing, RFC 5322 mimetext replies, and AI auto-response loops. |
 | [mtcute](skills/mtcute/) | Build high-performance Telegram userbots and MTProto client apps using @mtcute/node, @mtcute/dispatcher, SQLite sessions, and typed raw TL calls. |
 | [duckdb-wasm](skills/duckdb-wasm/) | Query Parquet files, run in-browser analytical SQL, and persist databases to OPFS with @duckdb/duckdb-wasm, Web Workers, and Apache Arrow tables. |
-| [discord-activities](skills/discord-activities/) | Build, ship, and test Discord Activities with @discord/embedded-app-sdk, OAuth2 token exchange, /.proxy/ CSP routing, and voice channel presence. |
+| [discord-activities](skills/discord-activities/) | Build, ship, and test Discord Activities with @discord/embedded-app-sdk, OAuth2 token exchange, reverse proxy CSP routing, and voice channel presence. |
 
 ## Install
 
@@ -129,7 +129,9 @@ skills/
 │       └── sources.md
 ├── humanize-text/
 │   ├── SKILL.md
-│   └── eval.md
+│   ├── eval.md
+│   └── agents/
+│       └── openai.yaml
 ├── telegram-serverless-bot/
 │   ├── SKILL.md
 │   ├── eval.md

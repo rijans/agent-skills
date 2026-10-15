@@ -1,6 +1,6 @@
 ---
 name: discord-activities
-description: Build, ship, and test Discord Activities with @discord/embedded-app-sdk, OAuth2 token exchange, /.proxy/ CSP routing, and voice channel presence. Use when building web apps that run inside Discord voice channels and DMs—from multiplayer games and watch-parties to collaborative tools and soundboards.
+description: Build, ship, and test Discord Activities with @discord/embedded-app-sdk, OAuth2 token exchange, reverse proxy CSP routing, and voice channel presence. Use when building web apps that run inside Discord voice channels and DMs—from multiplayer games and watch-parties to collaborative tools and soundboards.
 license: MIT
 compatibility: Portable across Agent Skills hosts (Claude Code, Cursor, Codex, Antigravity, Gemini, GitHub Copilot, Windsurf, OpenCode, Cline). Local development supports browser mock mode or Cloudflare Tunnels (cloudflared) with Node.js >=18, Bun, or Cloudflare Workers.
 metadata:

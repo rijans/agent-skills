@@ -25,7 +25,7 @@
       "name": "discord-activities",
       "source": "./skills/discord-activities",
       "skills": "./",
-      "description": "Build, ship, and test Discord Activities with @discord/embedded-app-sdk, OAuth2 token exchange, /.proxy/ CSP routing, and voice channel presence."
+      "description": "Build, ship, and test Discord Activities with @discord/embedded-app-sdk, OAuth2 token exchange, reverse proxy CSP routing, and voice channel presence."
     },
     {
       "name": "openauth",
@@ -55,7 +55,7 @@
       "name": "humanize-text",
       "source": "./skills/humanize-text",
       "skills": "./",
-      "description": "Write and rewrite natural, specific, human-sounding prose while preserving voice, meaning, nuance, and facts."
+      "description": "Write and rewrite natural, human-authored prose across articles, technical guides, and documentation while preserving voice, meaning, and nuance."
     }
   ]
 }
