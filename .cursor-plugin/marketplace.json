@@ -46,6 +46,12 @@
       "description": "Build high-performance Telegram userbots and MTProto client apps using @mtcute/node, @mtcute/dispatcher, SQLite sessions, and typed raw TL calls."
     },
     {
+      "name": "duckdb-wasm",
+      "source": "./skills/duckdb-wasm",
+      "skills": "./",
+      "description": "Query Parquet files, run in-browser analytical SQL, and persist databases to OPFS with @duckdb/duckdb-wasm, Web Workers, and Apache Arrow tables."
+    },
+    {
       "name": "humanize-text",
       "source": "./skills/humanize-text",
       "skills": "./",

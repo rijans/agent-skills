@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DuckDB-Wasm Parquet Analyzer</title>
+    <style>
+      :root {
+        --primary: #3182ce;
+        --bg: #f7fafc;
+        --card-bg: #ffffff;
+        --border: #e2e8f0;
+      }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        background: var(--bg);
+        color: #2d3748;
+        margin: 0;
+        padding: 2rem;
+      }
+      .container {
+        max-width: 1000px;
+        margin: 0 auto;
+      }
+      header {
+        margin-bottom: 2rem;
+      }
+      h1 {
+        margin: 0 0 0.5rem 0;
+        font-size: 1.75rem;
+      }
+      #status {
+        font-size: 0.9rem;
+        color: #718096;
+      }
+      .drop-zone {
+        border: 2px dashed var(--border);
+        background: var(--card-bg);
+        border-radius: 8px;
+        padding: 2.5rem;
+        text-align: center;
+        margin-bottom: 1.5rem;
+        cursor: pointer;
+        transition: border-color 0.2s, background 0.2s;
+      }
+      .drop-zone.drag-active {
+        border-color: var(--primary);
+        background: #ebf8ff;
+      }
+      .query-section {
+        background: var(--card-bg);
+        padding: 1.5rem;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        margin-bottom: 1.5rem;
+      }
+      textarea {
+        width: 100%;
+        box-sizing: border-box;
+        height: 80px;
+        font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+        font-size: 0.95rem;
+        padding: 0.75rem;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        margin-bottom: 1rem;
+        resize: vertical;
+      }
+      button {
+        background: var(--primary);
+        color: white;
+        border: none;
+        padding: 0.6rem 1.2rem;
+        border-radius: 6px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+      .results-section {
+        background: var(--card-bg);
+        padding: 1.5rem;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        overflow-x: auto;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.9rem;
+      }
+      th, td {
+        padding: 0.6rem 0.8rem;
+        text-align: left;
+        border-bottom: 1px solid var(--border);
+      }
+      th {
+        background: #edf2f7;
+        font-weight: 600;
+      }
+      .empty-msg {
+        color: #a0aec0;
+        text-align: center;
+        padding: 2rem;
+      }
+      .pagination-notice {
+        font-size: 0.8rem;
+        color: #718096;
+        margin-top: 1rem;
+        text-align: right;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>🦆 DuckDB-Wasm Parquet Analyzer</h1>
+        <div id="status">Initializing WebAssembly runtime...</div>
+      </header>
+
+      <div class="drop-zone" id="drop-zone">
+        <p><strong>Drag and drop a .parquet file here</strong> or click to browse</p>
+        <input type="file" id="file-input" accept=".parquet" style="display: none" />
+      </div>
+
+      <div class="query-section">
+        <textarea id="query-input" placeholder="SELECT * FROM 'uploaded_data.parquet' LIMIT 10;"></textarea>
+        <button id="run-btn">Run SQL Query</button>
+      </div>
+
+      <div class="results-section">
+        <h3>Results</h3>
+        <div id="results-container">
+          <p class="empty-msg">Load a Parquet file to view query results.</p>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+    <script>
+      // Trigger file input when clicking drop zone
+      document.getElementById('drop-zone').addEventListener('click', () => {
+        document.getElementById('file-input').click()
+      })
+    </script>
+  </body>
+</html>

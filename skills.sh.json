@@ -33,6 +33,13 @@
       ]
     },
     {
+      "title": "Local-First & Data Analytics",
+      "description": "Run in-browser analytical SQL, query Parquet files, and persist data to OPFS with @duckdb/duckdb-wasm and Apache Arrow.",
+      "skills": [
+        "duckdb-wasm"
+      ]
+    },
+    {
       "title": "Writing & Editorial",
       "description": "Write and rewrite natural, specific, human-sounding prose while preserving voice, meaning, nuance, and facts.",
       "skills": [

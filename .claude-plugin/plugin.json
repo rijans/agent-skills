@@ -1,6 +1,6 @@
 {
   "name": "rijans-agent-skills",
-  "description": "Portable Agent Skills for AI coding agents, editors, and assistants — including mtcute, cloudflare-email-workers, openauth, discord-activities, telegram-serverless-bot, use-telegram-serverless, and humanize-text.",
+  "description": "Portable Agent Skills for AI coding agents, editors, and assistants — including duckdb-wasm, mtcute, cloudflare-email-workers, openauth, discord-activities, telegram-serverless-bot, use-telegram-serverless, and humanize-text.",
   "version": "1.5.0",
   "author": {
     "name": "Jaber Al Nahian",
@@ -12,6 +12,11 @@
   "keywords": [
     "agent-skills",
     "skill-md",
+    "duckdb-wasm",
+    "duckdb",
+    "parquet",
+    "arrow",
+    "opfs",
     "mtcute",
     "mtproto",
     "telegram-userbot",

@@ -20,6 +20,7 @@ Skills in this repository are designed to be useful across tools that support th
 | [openauth](skills/openauth/) | Deploy self-hosted OAuth2 and OIDC servers with OpenAuth, createSubjects schemas, prebuilt PasswordUI and CodeUI, and cross-framework client verification. |
 | [cloudflare-email-workers](skills/cloudflare-email-workers/) | Build, deploy, and test Cloudflare Email Routing Workers with postal-mime MIME parsing, RFC 5322 mimetext replies, and AI auto-response loops. |
 | [mtcute](skills/mtcute/) | Build high-performance Telegram userbots and MTProto client apps using @mtcute/node, @mtcute/dispatcher, SQLite sessions, and typed raw TL calls. |
+| [duckdb-wasm](skills/duckdb-wasm/) | Query Parquet files, run in-browser analytical SQL, and persist databases to OPFS with @duckdb/duckdb-wasm, Web Workers, and Apache Arrow tables. |
 | [discord-activities](skills/discord-activities/) | Build, ship, and test Discord Activities with @discord/embedded-app-sdk, OAuth2 token exchange, /.proxy/ CSP routing, and voice channel presence. |
 
 ## Install
@@ -35,6 +36,7 @@ npx skills add rijans/agent-skills
 Or install a specific skill:
 
 ```bash
+npx skills add rijans/agent-skills --skill duckdb-wasm
 npx skills add rijans/agent-skills --skill mtcute
 npx skills add rijans/agent-skills --skill cloudflare-email-workers
 npx skills add rijans/agent-skills --skill openauth
@@ -50,6 +52,7 @@ Register this repository as a Claude Code plugin marketplace and install skills 
 
 ```text
 /plugin marketplace add rijans/agent-skills
+/plugin install duckdb-wasm@rijans-agent-skills
 /plugin install mtcute@rijans-agent-skills
 /plugin install cloudflare-email-workers@rijans-agent-skills
 /plugin install openauth@rijans-agent-skills
@@ -111,6 +114,18 @@ skills/
 │       ├── dispatcher-and-filters.md
 │       ├── media-and-files.md
 │       ├── raw-tl-and-errors.md
+│       └── sources.md
+├── duckdb-wasm/
+│   ├── SKILL.md
+│   ├── eval.md
+│   ├── agents/
+│   │   └── openai.yaml
+│   └── references/
+│       ├── setup-and-bundling.md
+│       ├── files-and-parquet.md
+│       ├── opfs-persistence.md
+│       ├── queries-and-arrow.md
+│       ├── security-and-injection.md
 │       └── sources.md
 ├── humanize-text/
 │   ├── SKILL.md
@@ -225,6 +240,18 @@ Build high-performance Telegram userbots, client automations, and MTProto applic
 - **Raw MTProto Type Language (TL) Calls**: Direct low-level RPC queries (`tg.call({ _: '...' })`) with strict schema typing, automatic access hash caching (`resolvePeer`), and transparent `FLOOD_WAIT` backoff (`floodSleepThreshold`).
 
 See [the skill](skills/mtcute/SKILL.md) and its [examples](examples/mtcute/) for details.
+
+## DuckDB-Wasm
+
+Execute blazing-fast analytical SQL directly inside web browsers using [`@duckdb/duckdb-wasm`](https://www.npmjs.com/package/@duckdb/duckdb-wasm), Web Workers, and Apache Arrow:
+
+- **Zero-Server Columnar Analytics**: Query multi-megabyte local Parquet and CSV files on demand via `db.registerFileHandle` and browser FileReader streams without backend uploads.
+- **Durable OPFS Storage**: Persist analytical databases locally across page reloads using the browser's native Origin Private File System (`opfs://`) and explicit `CHECKPOINT;` durability.
+- **Modern Bundler Integration**: Battle-tested recipes for Vite (`?url` static assets), Next.js App Router (SSR-isolated client components), and zero-config CDN loading via `getJsDelivrBundles()`.
+- **Apache Arrow Table Processing**: Direct zero-copy column vector access and streaming batch iteration preventing JavaScript heap exhaustion on 100k+ row datasets.
+- **Cross-Origin Isolation Management**: Graceful fallback to the single-threaded `eh` bundle, with opt-in multi-threading (`pthreadWorker`) enabled via COOP/COEP headers.
+
+See [the skill](skills/duckdb-wasm/SKILL.md) and its [examples](examples/duckdb-wasm/) for details.
 
 ## Adding a skill
 

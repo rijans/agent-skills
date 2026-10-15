@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DuckDB-Wasm OPFS Persistent Store</title>
+    <style>
+      :root {
+        --primary: #2b6cb0;
+        --bg: #f7fafc;
+        --card-bg: #ffffff;
+        --border: #e2e8f0;
+      }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        background: var(--bg);
+        color: #2d3748;
+        margin: 0;
+        padding: 2rem;
+      }
+      .container {
+        max-width: 900px;
+        margin: 0 auto;
+      }
+      header {
+        margin-bottom: 2rem;
+      }
+      h1 {
+        margin: 0 0 0.5rem 0;
+        font-size: 1.75rem;
+      }
+      #status {
+        font-size: 0.9rem;
+        color: #718096;
+      }
+      .form-section {
+        background: var(--card-bg);
+        padding: 1.5rem;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        margin-bottom: 1.5rem;
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+      input {
+        flex: 1;
+        min-width: 200px;
+        padding: 0.6rem 0.8rem;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        font-size: 0.95rem;
+      }
+      button {
+        background: var(--primary);
+        color: white;
+        border: none;
+        padding: 0.6rem 1.2rem;
+        border-radius: 6px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      button.secondary {
+        background: #e2e8f0;
+        color: #4a5568;
+      }
+      button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+      .results-section {
+        background: var(--card-bg);
+        padding: 1.5rem;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+      }
+      .header-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.9rem;
+      }
+      th, td {
+        padding: 0.6rem 0.8rem;
+        text-align: left;
+        border-bottom: 1px solid var(--border);
+      }
+      th {
+        background: #edf2f7;
+        font-weight: 600;
+      }
+      .empty-msg {
+        color: #a0aec0;
+        text-align: center;
+        padding: 2rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>💾 DuckDB-Wasm OPFS Persistent Store</h1>
+        <div id="status">Connecting to Origin Private File System...</div>
+      </header>
+
+      <div class="form-section">
+        <input type="text" id="action-input" placeholder="Action (e.g. USER_LOGIN, ORDER_PLACED)" />
+        <input type="text" id="details-input" placeholder="Details (e.g. Plan: Pro, SKU: 124)" />
+        <button id="add-btn">Add Log & Checkpoint</button>
+      </div>
+
+      <div class="results-section">
+        <div class="header-actions">
+          <h3>Persisted Logs (Survives Page Reloads)</h3>
+          <button id="clear-btn" class="secondary">Clear Logs</button>
+        </div>
+        <div id="logs-container">
+          <p class="empty-msg">Loading persisted records from OPFS...</p>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

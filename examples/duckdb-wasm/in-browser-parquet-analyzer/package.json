@@ -1,0 +1,18 @@
+{
+  "name": "duckdb-in-browser-parquet-analyzer",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "In-browser Parquet file analyzer and SQL query engine powered by DuckDB-Wasm and Vite",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@duckdb/duckdb-wasm": "^1.29.0",
+    "apache-arrow": "^18.1.0"
+  },
+  "devDependencies": {
+    "vite": "^6.0.0"
+  }
+}

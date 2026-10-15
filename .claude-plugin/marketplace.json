@@ -64,6 +64,15 @@
       ]
     },
     {
+      "name": "duckdb-wasm",
+      "description": "Query Parquet files, run in-browser analytical SQL, and persist databases to OPFS with @duckdb/duckdb-wasm, Web Workers, and Apache Arrow tables.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/duckdb-wasm"
+      ]
+    },
+    {
       "name": "humanize-text",
       "description": "Write and rewrite natural, specific, human-sounding prose while preserving voice, meaning, nuance, and facts.",
       "source": "./",

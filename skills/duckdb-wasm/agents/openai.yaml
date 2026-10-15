@@ -1,0 +1,5 @@
+interface:
+  display_name: "DuckDB-Wasm (In-Browser SQL & Parquet)"
+  short_description: "Run in-browser analytical SQL, query Parquet files, and persist data to OPFS with DuckDB-Wasm"
+  default_prompt: |
+    Use DuckDB-Wasm to build, configure, test, or debug this in-browser analytical SQL, Parquet ingestion, OPFS persistence, or Web Worker task.
