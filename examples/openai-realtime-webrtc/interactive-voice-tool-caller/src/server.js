@@ -22,8 +22,10 @@ const FLIGHT_DATABASE = {
 }
 
 const server = http.createServer(async (req, res) => {
+  const { pathname } = new URL(req.url, 'http://localhost')
+
   // 1. Session Token Minting with Declared Tools
-  if (req.method === 'POST' && req.url === '/api/session') {
+  if (req.method === 'POST' && pathname === '/api/session') {
     const apiKey = process.env.OPENAI_API_KEY
     if (!apiKey) {
       res.writeHead(500, { 'Content-Type': 'application/json' })
@@ -106,8 +108,9 @@ const server = http.createServer(async (req, res) => {
   }
 
   // 2. Backend Tool Delegation API
-  if (req.method === 'GET' && req.url.startsWith('/api/flights/')) {
-    const flightNumber = decodeURIComponent(req.url.replace('/api/flights/', '')).toUpperCase()
+  if (req.method === 'GET' && pathname.startsWith('/api/flights/')) {
+    const rawFlight = pathname.slice('/api/flights/'.length)
+    const flightNumber = decodeURIComponent(rawFlight).toUpperCase()
     console.log(`[Server Tool] Looking up flight: ${flightNumber}`)
 
     const info = FLIGHT_DATABASE[flightNumber]
@@ -120,11 +123,17 @@ const server = http.createServer(async (req, res) => {
     }
   }
 
-  // 3. Static File Server
-  const reqPath = req.url === '/' ? '/index.html' : req.url
-  const filePath = path.join(publicDir, path.normalize(reqPath))
+  // 3. Static File Server (GET/HEAD only)
+  if (req.method !== 'GET' && req.method !== 'HEAD') {
+    res.writeHead(405, { 'Content-Type': 'text/plain' })
+    return res.end('Method Not Allowed')
+  }
 
-  if (!filePath.startsWith(publicDir)) {
+  const reqPath = pathname === '/' ? '/index.html' : pathname
+  const normalizedPath = path.normalize(reqPath).replace(/^(\.\.[\/\\])+/, '')
+  const filePath = path.join(publicDir, normalizedPath)
+
+  if (!filePath.startsWith(publicDir + path.sep) && filePath !== publicDir) {
     res.writeHead(403, { 'Content-Type': 'text/plain' })
     return res.end('Access Denied')
   }

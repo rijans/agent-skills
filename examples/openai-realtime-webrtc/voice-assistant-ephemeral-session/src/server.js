@@ -15,8 +15,10 @@ const MIME_TYPES = {
 }
 
 const server = http.createServer(async (req, res) => {
+  const { pathname } = new URL(req.url, 'http://localhost')
+
   // 1. Session Token Minting Endpoint
-  if (req.method === 'POST' && req.url === '/api/session') {
+  if (req.method === 'POST' && pathname === '/api/session') {
     const apiKey = process.env.OPENAI_API_KEY
     if (!apiKey) {
       res.writeHead(500, { 'Content-Type': 'application/json' })
@@ -70,11 +72,17 @@ const server = http.createServer(async (req, res) => {
     }
   }
 
-  // 2. Static File Server
-  const reqPath = req.url === '/' ? '/index.html' : req.url
-  const filePath = path.join(publicDir, path.normalize(reqPath))
+  // 2. Static File Server (GET/HEAD only)
+  if (req.method !== 'GET' && req.method !== 'HEAD') {
+    res.writeHead(405, { 'Content-Type': 'text/plain' })
+    return res.end('Method Not Allowed')
+  }
 
-  if (!filePath.startsWith(publicDir)) {
+  const reqPath = pathname === '/' ? '/index.html' : pathname
+  const normalizedPath = path.normalize(reqPath).replace(/^(\.\.[\/\\])+/, '')
+  const filePath = path.join(publicDir, normalizedPath)
+
+  if (!filePath.startsWith(publicDir + path.sep) && filePath !== publicDir) {
     res.writeHead(403, { 'Content-Type': 'text/plain' })
     return res.end('Access Denied')
   }

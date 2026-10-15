@@ -90,6 +90,9 @@ function cancelCurrentResponse(dataChannel) {
 
 When using `server_vad`, OpenAI automatically stops sending new audio packets over WebRTC when the user speaks. However, **the browser's local audio element may still have several hundred milliseconds of audio buffered in its playback queue**.
 
+> [!WARNING]
+> **Never set `audioElement.currentTime = 0` on a WebRTC live stream**. In browser specifications, `MediaStream` objects have indefinite duration (`Infinity`) and are non-seekable. Assigning `currentTime = 0` throws an `InvalidStateError` DOMException (`"The element's source is a stream"`). Call `.pause()` to silence immediately, and resume with `.play()` on the next turn.
+
 To ensure a seamless, non-overlapping interruption experience:
 
 ```javascript
@@ -110,7 +113,6 @@ function handleRealtimeEvent(msg) {
       // A. Mute/pause local browser audio immediately
       if (currentAudioElement) {
         currentAudioElement.pause()
-        currentAudioElement.currentTime = 0
       }
 
       // B. Cancel further model generation
@@ -136,8 +138,13 @@ function handleRealtimeEvent(msg) {
       appendTranscriptToUI('user', msg.transcript)
       break
 
-    // 4. Display live model speech transcript
+    // 4. Display live model speech transcript & resume audio if paused
     case 'response.audio_transcript.delta':
+      if (currentAudioElement && currentAudioElement.paused) {
+        currentAudioElement.play().catch((err) => {
+          console.warn('[WebRTC] Audio resume error:', err)
+        })
+      }
       appendTranscriptChunkToUI('assistant', msg.delta)
       break
   }

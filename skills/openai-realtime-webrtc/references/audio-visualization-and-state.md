@@ -9,8 +9,11 @@ This guide covers real-time audio waveform visualization using the Web Audio API
 To render an animated audio visualizer for incoming model voice or outgoing user speech:
 
 ```javascript
-export function createAudioVisualizer(mediaStream, canvasElement) {
+export async function createAudioVisualizer(mediaStream, canvasElement) {
   const audioCtx = new (window.AudioContext || window.webkitAudioContext)()
+  if (audioCtx.state === 'suspended') {
+    await audioCtx.resume()
+  }
   const source = audioCtx.createMediaStreamSource(mediaStream)
   const analyser = audioCtx.createAnalyser()
 

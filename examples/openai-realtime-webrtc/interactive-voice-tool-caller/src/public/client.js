@@ -36,8 +36,17 @@ function appendMessage(role, text) {
   return msgDiv
 }
 
-function startVisualizer(stream) {
-  audioCtx = new (window.AudioContext || window.webkitAudioContext)()
+async function startVisualizer(stream) {
+  if (animationFrameId) {
+    cancelAnimationFrame(animationFrameId)
+    animationFrameId = null
+  }
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)()
+  }
+  if (audioCtx.state === 'suspended') {
+    await audioCtx.resume()
+  }
   const source = audioCtx.createMediaStreamSource(stream)
   analyser = audioCtx.createAnalyser()
   analyser.fftSize = 64
@@ -70,6 +79,14 @@ async function startAgent() {
   updateStatus('Connecting...', 'thinking')
   connectBtn.disabled = true
 
+  // Ensure AudioContext is initialized/resumed within user gesture
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)()
+  }
+  if (audioCtx.state === 'suspended') {
+    await audioCtx.resume()
+  }
+
   try {
     // 1. Fetch Ephemeral Session Token with pre-declared tools
     const sessionRes = await fetch('/api/session', { method: 'POST' })
@@ -88,9 +105,15 @@ async function startAgent() {
 
     audioElement = document.createElement('audio')
     audioElement.autoplay = true
+    audioElement.style.display = 'none'
+    document.body.appendChild(audioElement)
+
     peerConnection.ontrack = (event) => {
       console.log('[WebRTC] Received model audio stream')
       audioElement.srcObject = event.streams[0]
+      audioElement.play().catch((err) => {
+        console.warn('[WebRTC] Audio autoplay prevented:', err)
+      })
       // Visualize incoming model audio
       startVisualizer(event.streams[0])
     }
@@ -213,7 +236,6 @@ async function handleRealtimeEvent(msg) {
       updateStatus('User Speaking...', 'connected')
       if (audioElement) {
         audioElement.pause()
-        audioElement.currentTime = 0
       }
       currentAssistantMsgEl = null
       break
@@ -228,6 +250,11 @@ async function handleRealtimeEvent(msg) {
     // Live Model Voice Streaming Transcript
     case 'response.audio_transcript.delta':
       updateStatus('Agent Speaking...', 'speaking')
+      if (audioElement && audioElement.paused) {
+        audioElement.play().catch((err) => {
+          console.warn('[WebRTC] Audio resume error:', err)
+        })
+      }
       if (!currentAssistantMsgEl) {
         currentAssistantMsgEl = appendMessage('assistant', '')
       }
@@ -301,6 +328,7 @@ function cleanup() {
   if (audioElement) {
     audioElement.pause()
     audioElement.srcObject = null
+    audioElement.remove()
     audioElement = null
   }
 

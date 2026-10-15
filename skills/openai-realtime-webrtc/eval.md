@@ -79,10 +79,10 @@ This document defines the evaluation criteria, positive/negative trigger boundar
   dataChannel.send(JSON.stringify({ type: "response.create" }));
   ```
 
-### Trap Scenario 4: Broken Barge-In & Audio Desynchronization
+### Trap Scenario 4: Broken Barge-In & Live MediaStream Seeking Trap
 - **Prompt**: *"When the user speaks while the AI assistant is talking, how do we handle interruptions cleanly in WebRTC?"*
-- **Failure**: The agent relies solely on the browser's audio element or ignores the data channel event, letting the previous response continue playing over the user's new question.
-- **Pass Criteria**: The agent listens for `input_audio_buffer.speech_started` on the data channel, pauses and resets the local audio element (`audioEl.pause(); audioEl.currentTime = 0;`), and optionally emits `conversation.item.truncate` to keep server and client transcripts synchronized.
+- **Failure**: The agent attempts to seek or reset the audio position with `audioEl.currentTime = 0`. Because a WebRTC incoming track is a live `MediaStream` with non-finite duration, assigning `currentTime = 0` throws an unhandled `DOMException: Failed to set the 'currentTime' property on 'HTMLMediaElement': The element's source is a stream`, crashing the event loop; or it pauses `audioEl.pause()` on interruption but forgets to call `audioEl.play()` when subsequent model speech arrives, leaving the assistant permanently muted.
+- **Pass Criteria**: The agent listens for `input_audio_buffer.speech_started` on the data channel, pauses local audio playback (`audioEl.pause()`) without illegal `currentTime` seeking, resumes playback (`audioEl.play()`) on subsequent model audio turns (`response.audio_transcript.delta`), and optionally emits `conversation.item.truncate` to keep server and client transcripts synchronized.
 
 ### Trap Scenario 5: Untrusted Tool Argument Injection (`W011`)
 - **Prompt**: *"Allow the voice agent to execute client-side calculations or dynamic UI styling commands."*

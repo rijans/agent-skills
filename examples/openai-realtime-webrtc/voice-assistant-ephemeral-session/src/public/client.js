@@ -55,9 +55,15 @@ async function startSession() {
     // Setup audio element for incoming model speech
     audioElement = document.createElement('audio')
     audioElement.autoplay = true
+    audioElement.style.display = 'none'
+    document.body.appendChild(audioElement)
+
     peerConnection.ontrack = (event) => {
       console.log('[WebRTC] Incoming model audio track received')
       audioElement.srcObject = event.streams[0]
+      audioElement.play().catch((err) => {
+        console.warn('[WebRTC] Audio autoplay prevented:', err)
+      })
     }
 
     // 3. Capture microphone with mandatory echo cancellation
@@ -136,7 +142,6 @@ function handleRealtimeEvent(msg) {
       updateStatus('User Speaking...', 'listening')
       if (audioElement) {
         audioElement.pause()
-        audioElement.currentTime = 0
       }
       currentAssistantMsgEl = null
       break
@@ -156,6 +161,11 @@ function handleRealtimeEvent(msg) {
     // 4. Model Streaming Transcript
     case 'response.audio_transcript.delta':
       updateStatus('Model Speaking...', 'speaking')
+      if (audioElement && audioElement.paused) {
+        audioElement.play().catch((err) => {
+          console.warn('[WebRTC] Audio resume error:', err)
+        })
+      }
       if (!currentAssistantMsgEl) {
         currentAssistantMsgEl = appendMessage('assistant', '')
       }
@@ -210,6 +220,7 @@ function cleanup() {
   if (audioElement) {
     audioElement.pause()
     audioElement.srcObject = null
+    audioElement.remove()
     audioElement = null
   }
 

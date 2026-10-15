@@ -14,9 +14,15 @@ export async function connectRealtimeWebRTC(ephemeralToken) {
   // 2. Set up audio element for incoming model speech
   const audioEl = document.createElement('audio')
   audioEl.autoplay = true
+  audioEl.style.display = 'none'
+  document.body.appendChild(audioEl) // Required for Safari/WebKit media playback
+
   pc.ontrack = (event) => {
     console.log('[WebRTC] Incoming model audio track received')
     audioEl.srcObject = event.streams[0]
+    audioEl.play().catch((err) => {
+      console.warn('[WebRTC] Autoplay prevented:', err)
+    })
   }
 
   // 3. Capture user microphone with mandatory hardware echo cancellation
@@ -113,6 +119,7 @@ export function disconnectSession({ pc, dataChannel, mediaStream, audioEl }) {
   if (audioEl) {
     audioEl.pause()
     audioEl.srcObject = null
+    audioEl.remove()
   }
 
   // 4. Close Peer Connection
