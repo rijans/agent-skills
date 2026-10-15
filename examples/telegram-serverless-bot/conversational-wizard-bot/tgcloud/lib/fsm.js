@@ -1,17 +1,20 @@
-import db from "sdk/db";
+import { db } from "sdk";
+import { eq } from "sdk/db";
+import { userSessions } from "../schema.js";
 
 const TTL_SECONDS = 3600;
 
-export function getSession(userId) {
-  const row = db.query(
-    "SELECT state, step, payload, updated_at FROM user_sessions WHERE user_id = ?",
-    [userId]
-  )[0];
+export async function getSession(userId) {
+  const row = await db.select()
+    .from(userSessions)
+    .where(eq(userSessions.userId, userId))
+    .get();
 
   if (!row) return null;
   const now = Math.floor(Date.now() / 1000);
-  if (now - row.updated_at > TTL_SECONDS) {
-    clearSession(userId);
+  const updatedUnix = row.updatedAt instanceof Date ? Math.floor(row.updatedAt.getTime() / 1000) : Number(row.updatedAt);
+  if (now - updatedUnix > TTL_SECONDS) {
+    await clearSession(userId);
     return null;
   }
 
@@ -23,20 +26,30 @@ export function getSession(userId) {
   return { state: row.state, step: row.step, data };
 }
 
-export function setSession(userId, state, step, data = {}) {
-  const now = Math.floor(Date.now() / 1000);
-  db.query(
-    `INSERT INTO user_sessions (user_id, state, step, payload, updated_at)
-     VALUES (?, ?, ?, ?, ?)
-     ON CONFLICT(user_id) DO UPDATE SET
-       state = excluded.state,
-       step = excluded.step,
-       payload = excluded.payload,
-       updated_at = excluded.updated_at`,
-    [userId, state, step, JSON.stringify(data), now]
-  );
+export async function setSession(userId, state, step, data = {}) {
+  const payloadStr = JSON.stringify(data);
+  await db.insert(userSessions)
+    .values({
+      userId,
+      state,
+      step,
+      payload: payloadStr,
+      updatedAt: new Date(),
+    })
+    .onConflictDoUpdate({
+      target: userSessions.userId,
+      set: {
+        state,
+        step,
+        payload: payloadStr,
+        updatedAt: new Date(),
+      },
+    })
+    .run();
 }
 
-export function clearSession(userId) {
-  db.query("DELETE FROM user_sessions WHERE user_id = ?", [userId]);
+export async function clearSession(userId) {
+  await db.delete(userSessions)
+    .where(eq(userSessions.userId, userId))
+    .run();
 }

@@ -110,7 +110,7 @@ See [the skill](skills/use-telegram-serverless/SKILL.md) and its [examples](exam
 
 Build, ship, and test Telegram bots directly inside [Telegram Serverless](https://core.telegram.org/bots/serverless)—laser-focused on bot handlers, stateful conversations, and Stars payments:
 
-- **Progressive Bot Architecture**: Single-handler dispatcher (`tgcloud/handlers/bot.js`) for simple command bots, scaling to modular feature handlers (`tgcloud/lib/`) and persistent SQLite session state for multi-step wizards.
+- **Progressive Bot Architecture**: Native flat update handlers (`tgcloud/handlers/message.js`, `callback_query.js`, `pre_checkout_query.js`) for lightweight command bots, scaling to modular feature handlers (`tgcloud/lib/`) and persistent SQLite session state for multi-step wizards.
 - **Interactive Keyboards & 64-Byte Callback Routers**: Inline buttons, reply markups, menu buttons, and compact payload encoding pattern (`<prefix>:<action>:<id>`) with immediate `answerCallbackQuery` acknowledgment.
 - **Telegram Stars (`XTR`) Digital Payments**: Native Stars invoice dispatch (`sendInvoice`), `<10s` pre-checkout verification (`answerPreCheckoutQuery`), and fulfillment ledgering in SQLite (`successful_payment`).
 - **Binary Media & Documents**: In-memory binary uploads via `Uint8Array` and `InputFile`, CDN asset downloads, and outbound media streaming.

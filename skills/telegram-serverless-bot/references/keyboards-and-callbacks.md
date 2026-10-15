@@ -8,22 +8,24 @@ This reference covers interactive buttons, menus, and the 64-byte callback data 
 
 Telegram supports two keyboard types:
 
-| Type | Display Location | Use Case | Webhook Update |
+| Type | Display Location | Use Case | Webhook Handler |
 |---|---|---|---|
-| **Inline Keyboard** (`inline_keyboard`) | Directly attached beneath a specific message | Menus, pagination, toggles, external links, Mini App launchers | `update.callback_query` |
-| **Reply Keyboard** (`keyboard`) | Replaces the user's regular text keyboard at bottom | Persistent navigation, phone/location sharing, quick replies | `update.message.text` |
+| **Inline Keyboard** (`inline_keyboard`) | Directly attached beneath a specific message | Menus, pagination, toggles, external links, Mini App launchers | `tgcloud/handlers/callback_query.js` |
+| **Reply Keyboard** (`keyboard`) | Replaces the user's regular text keyboard at bottom | Persistent navigation, phone/location sharing, quick replies | `tgcloud/handlers/message.js` |
 
 ---
 
-## 2. Inline Keyboards & Mini App Launchers
+## 2. Sending Inline Keyboards & Mini App Launchers
 
-### Construction
+Inline keyboards are sent via the `reply_markup` parameter in `api.sendMessage`, `api.sendPhoto`, or `api.editMessageText`:
 
 ```javascript
-import api from "sdk/api";
+import { api } from "sdk";
 
 export async function sendMainMenu(chatId) {
-  return api.sendMessage(chatId, "🎮 **Main Menu**\nChoose an option below:", {
+  return api.sendMessage({
+    chat_id: chatId,
+    text: "🎮 **Main Menu**\nChoose an option below:",
     parse_mode: "Markdown",
     reply_markup: {
       inline_keyboard: [
@@ -74,39 +76,64 @@ export function parseCallbackData(data) {
 }
 ```
 
+If you have complex state that exceeds 64 bytes, store the payload in a SQLite session or cache table and pass only an integer row ID in `callback_data`.
+
 ---
 
-## 4. Handling Callback Queries
+## 4. Handling Callback Queries (`handlers/callback_query.js`)
+
+In Telegram Serverless, callback queries are routed to `tgcloud/handlers/callback_query.js`.
+The first argument `query` is the unwrapped [`CallbackQuery`](https://core.telegram.org/bots/api#callbackquery) object.
 
 ### Rule #1: Immediate Acknowledgment
 
 Whenever a `callback_query` update arrives, you **must** call `api.answerCallbackQuery` immediately:
 - Without this call, the user's Telegram client shows a loading spinner on the button for up to 30 seconds.
-- You can optionally display an ephemeral notification or alert box.
+- You can optionally display an ephemeral toast notification or modal alert.
 
 ```javascript
-import api from "sdk/api";
+// tgcloud/handlers/callback_query.js
+import { api } from "sdk";
 
-export async function handleCallbackQuery(cb) {
-  const data = cb.data || "";
-  const chatId = cb.message?.chat?.id;
-  const messageId = cb.message?.message_id;
+export default async function (query, ctx) {
+  const data = query.data || "";
+  const chatId = query.message?.chat?.id;
+  const messageId = query.message?.message_id;
 
-  // 1. Acknowledge immediately (with optional toast or popup alert)
-  await api.answerCallbackQuery(cb.id, {
+  // 1. Acknowledge immediately to dismiss spinner
+  await api.answerCallbackQuery({
+    callback_query_id: query.id,
     text: "Updated!",
-    show_alert: false // true renders a modal popup dialog
+    show_alert: false // true renders a native modal dialog
   });
 
   // 2. Route the action
   if (data === "menu:stats") {
-    await api.editMessageText("📊 **Live Serverless Stats**\nIsolate cold start: ~5ms\nUptime: 99.99%", {
+    await api.editMessageText({
       chat_id: chatId,
       message_id: messageId,
+      text: "📊 **Live Serverless Stats**\nIsolate cold start: ~5ms\nUptime: 99.99%",
       parse_mode: "Markdown",
       reply_markup: {
         inline_keyboard: [
           [{ text: "⬅️ Back", callback_data: "menu:back" }]
+        ]
+      }
+    });
+  }
+
+  if (data === "menu:back") {
+    await api.editMessageText({
+      chat_id: chatId,
+      message_id: messageId,
+      text: "🎮 **Main Menu**\nChoose an option below:",
+      parse_mode: "Markdown",
+      reply_markup: {
+        inline_keyboard: [
+          [
+            { text: "📊 Stats", callback_data: "menu:stats" },
+            { text: "⚙️ Settings", callback_data: "menu:settings" }
+          ]
         ]
       }
     });

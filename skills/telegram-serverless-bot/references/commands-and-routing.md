@@ -1,161 +1,169 @@
 # Bot Commands and Routing
 
-This reference details how to structure, route, and handle incoming Telegram updates in Telegram Serverless (`tgcloud/handlers/*.js`).
+This reference details how to structure, route, and handle incoming Telegram updates in Telegram Serverless (`tgcloud/handlers/<update_type>.js`).
 
 ---
 
-## 1. Handler Anatomy & Execution Context
+## 1. Handler Architecture & Execution Context
 
-Telegram Serverless executes ES module handlers inside isolated V8 environments. Bot updates arrive as an incoming webhook event.
+Telegram Serverless executes ES module handlers inside isolated V8 environments.
+- Handlers live in a **flat directory**: `tgcloud/handlers/<update_type>.js`.
+- Each filename corresponds directly to a [Telegram Bot API `Update` field](https://core.telegram.org/bots/api#update):
+  - `handlers/message.js` -> incoming messages and commands (`/start`, `/help`)
+  - `handlers/callback_query.js` -> inline keyboard button clicks
+  - `handlers/pre_checkout_query.js` -> Telegram Stars checkout approvals
+  - `handlers/inline_query.js` -> inline bot queries (`@bot ...`)
+- **Selective Activation**: Telegram Serverless configures webhook `allowed_updates` automatically based on which handler files exist and are non-empty.
 
-A bot handler exports a default `async` function receiving the context:
+### Handler Export Signature & Arguments
+
+Every handler exports a default `async` function with two parameters:
 
 ```javascript
-import api from "sdk/api";
+import { api } from "sdk";
 
-export default async function (ctx) {
-  const update = ctx.update;
-  if (!update || !update.message) return;
-
-  const msg = update.message;
-  const text = msg.text || "";
-  const chatId = msg.chat.id;
-
-  if (text.startsWith("/start")) {
-    await api.sendMessage(chatId, "Welcome to our Serverless Bot!");
-  }
+export default async function (payload, ctx) {
+  // payload: The unwrapped entity for this update type (Message, CallbackQuery, PreCheckoutQuery)
+  // ctx.update: The outer envelope containing update_id
 }
 ```
 
-### Context Object (`ctx`)
-- `ctx.update`: The raw [Telegram Update](https://core.telegram.org/bots/api#update) object (`message`, `callback_query`, `inline_query`, `pre_checkout_query`, etc.).
-- `ctx.env`: Environment variables and secrets configured in the Telegram Serverless project.
+In `tgcloud/handlers/message.js`:
+- The 1st argument is a [`Message`](https://core.telegram.org/bots/api#message) object (`message.text`, `message.chat.id`, `message.from.id`).
+- The 2nd argument `ctx` contains `ctx.update` (`ctx.update.update_id`).
 
 ---
 
-## 2. Command Parsing & Dispatching Patterns
+## 2. Text Commands & Dispatching (`handlers/message.js`)
 
-### Tier 1: Single-Handler Dispatcher (Lightweight Bots)
-
-For simple bots (under 100 lines), keep everything inside `tgcloud/handlers/bot.js`:
+In Telegram Serverless, Bot API methods accept a **single options object** with `snake_case` properties matching the official Telegram Bot API parameters.
 
 ```javascript
-import api from "sdk/api";
+// tgcloud/handlers/message.js
+import { api } from "sdk";
 
-export default async function (ctx) {
-  const update = ctx.update;
+export default async function (message, ctx) {
+  // Always guard against non-text messages (e.g. photos, stickers)
+  if (typeof message.text !== "string") return;
 
-  // 1. Handle incoming text messages & commands
-  if (update.message?.text) {
-    const text = update.message.text.trim();
-    const chatId = update.message.chat.id;
-    const [command, ...args] = text.split(/\s+/);
+  const text = message.text.trim();
+  const chatId = message.chat.id;
+  const [command, ...args] = text.split(/\s+/);
 
-    switch (command.toLowerCase()) {
-      case "/start":
-        return api.sendMessage(chatId, "👋 Hello! I am running on Telegram Serverless.", {
-          reply_markup: {
-            inline_keyboard: [
-              [{ text: "📖 Documentation", url: "https://core.telegram.org/bots/serverless" }]
+  switch (command.toLowerCase()) {
+    case "/start":
+      return api.sendMessage({
+        chat_id: chatId,
+        text: "👋 **Welcome to your Telegram Serverless Bot!**\n\nInstant V8 isolate execution with zero server management.",
+        parse_mode: "Markdown",
+        reply_markup: {
+          inline_keyboard: [
+            [
+              { text: "⚡ Ping", callback_data: "cmd:ping" },
+              { text: "ℹ️ Help", callback_data: "cmd:help" }
+            ],
+            [
+              { text: "📖 Telegram Serverless Docs", url: "https://core.telegram.org/bots/serverless" }
             ]
-          }
-        });
+          ]
+        }
+      });
 
-      case "/help":
-        return api.sendMessage(chatId, "ℹ️ Available commands:\n/start - Start bot\n/help - Show this message\n/ping - Check latency");
+    case "/help":
+      return api.sendMessage({
+        chat_id: chatId,
+        text: "ℹ️ **Available Commands:**\n/start - Open welcome menu\n/help - Show this help\n/ping - Measure isolate response",
+        parse_mode: "Markdown"
+      });
 
-      case "/ping":
-        return api.sendMessage(chatId, "🏓 Pong! Instant V8 isolate response.");
+    case "/ping":
+      return api.sendMessage({
+        chat_id: chatId,
+        text: "🏓 Pong! Handler executed in Telegram V8 isolate."
+      });
 
-      default:
-        // Optional fallback for unhandled text
-        return api.sendMessage(chatId, `I received: "${text}". Type /help for options.`);
-    }
-  }
-
-  // 2. Handle inline button callbacks
-  if (update.callback_query) {
-    const cb = update.callback_query;
-    await api.answerCallbackQuery(cb.id, { text: "Action received!" });
+    default:
+      return api.sendMessage({
+        chat_id: chatId,
+        text: `I received: "${text}". Send /help to see available commands.`
+      });
   }
 }
 ```
 
 ---
 
-## 3. Tier 2: Modular Architecture (Production Bots)
+## 3. Modular Architecture for Production Bots
 
-For complex multi-feature bots, separate concerns:
+For complex bots, separate domain logic cleanly under `tgcloud/lib/`:
 
 ```text
 tgcloud/
 ├── handlers/
-│   └── bot.js               # Central update dispatcher
+│   ├── message.js               # Message update entrypoint
+│   ├── callback_query.js        # Inline button entrypoint
+│   └── pre_checkout_query.js    # Stars checkout approval entrypoint
 ├── lib/
-│   ├── commands/            # Command handlers (/start, /profile, /settings)
+│   ├── commands/                # Command handlers (/start, /profile, /settings)
 │   │   ├── start.js
 │   │   └── help.js
-│   ├── callbacks/           # Callback query action handlers
-│   │   └── menu.js
-│   └── session.js           # SQLite session helpers
-└── schema.js                # SQLite tables
+│   ├── callbacks/               # Callback query action handlers
+│   │   └── router.js
+│   └── session.js               # SQLite session helpers
+└── schema.js                    # Persistent SQLite tables
 ```
 
-### Central Dispatcher (`tgcloud/handlers/bot.js`)
+### Clean Delegation in `tgcloud/handlers/message.js`
 
 ```javascript
-import api from "sdk/api";
+import { api } from "sdk";
 import { handleStart } from "../lib/commands/start.js";
 import { handleHelp } from "../lib/commands/help.js";
-import { handleCallback } from "../lib/callbacks/router.js";
-import { handlePreCheckout, handleSuccessfulPayment } from "../lib/payments/stars.js";
+import { handleFsmStep } from "../lib/fsm.js";
 
-export default async function (ctx) {
-  const { update } = ctx;
-  if (!update) return;
+export default async function (message, ctx) {
+  if (typeof message.text !== "string") return;
 
-  // 1. Pre-checkout query (Must respond <10s)
-  if (update.pre_checkout_query) {
-    return handlePreCheckout(update.pre_checkout_query);
-  }
+  const text = message.text.trim();
 
-  // 2. Successful Stars payment
-  if (update.message?.successful_payment) {
-    return handleSuccessfulPayment(update.message);
-  }
+  if (text.startsWith("/start")) return handleStart(message);
+  if (text.startsWith("/help")) return handleHelp(message);
 
-  // 3. Callback queries (Inline buttons)
-  if (update.callback_query) {
-    return handleCallback(update.callback_query);
-  }
+  // Check if user is in an active multi-step conversation
+  const handled = await handleFsmStep(message);
+  if (handled) return;
 
-  // 4. Text messages and commands
-  if (update.message?.text) {
-    const text = update.message.text.trim();
-    if (text.startsWith("/start")) return handleStart(update.message);
-    if (text.startsWith("/help")) return handleHelp(update.message);
-  }
+  await api.sendMessage({
+    chat_id: message.chat.id,
+    text: "Unknown command. Send /help for options."
+  });
 }
 ```
 
 ---
 
-## 4. BotFather Configuration & Chat Menu Buttons
+## 4. Bot UI Configuration: Autocomplete Commands & Menu Button
 
-To provide a seamless user experience, configure the bot commands and menu button using `sdk/api`:
+Configure your bot's autocomplete commands list and client menu button via `api`:
 
 ```javascript
-// Register command list in Telegram client UI autocomplete
-await api.setMyCommands([
-  { command: "start", description: "Start the bot" },
-  { command: "help", description: "Show help and commands" },
-  { command: "checkout", description: "Buy digital goods with Telegram Stars" }
-]);
+import { api } from "sdk";
 
-// Set default chat menu button
-await api.setChatMenuButton({
-  menu_button: { type: "commands" }
-});
+export async function setupBotUi() {
+  // 1. Register commands in Telegram client autocomplete list
+  await api.setMyCommands({
+    commands: [
+      { command: "start", description: "Open main menu" },
+      { command: "help", description: "Show available commands" },
+      { command: "buy", description: "Buy digital pass with Telegram Stars" }
+    ]
+  });
+
+  // 2. Set default bottom menu button to show commands list
+  await api.setChatMenuButton({
+    menu_button: { type: "commands" }
+  });
+}
 ```
 
 ---
@@ -163,11 +171,11 @@ await api.setChatMenuButton({
 ## 5. Security & Input Sanitization (`W011`)
 
 All message text is untrusted user input:
-- Always escape HTML or Markdown characters if using `parse_mode: "HTML"` or `parse_mode: "MarkdownV2"`.
-- Never evaluate or interpolate user text into dynamic code or unparameterized queries.
-- For HTML formatting, use a helper:
+- Always escape HTML special characters when using `parse_mode: "HTML"`.
+- When using `parse_mode: "Markdown"`, unescaped characters like `_` in user data will cause Telegram to return `400 Bad Request: can't parse entities`. Either wrap variable outputs in inline code backticks (e.g. `` `user_${id}` ``) or use HTML mode with `escapeHtml`:
+
 ```javascript
-function escapeHtml(text) {
+export function escapeHtml(text) {
   return String(text)
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")

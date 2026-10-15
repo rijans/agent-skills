@@ -1,16 +1,16 @@
-import { table, integer, text } from "sdk/db";
+import { table, integer, text, sql } from "sdk/db";
 
-export const user_sessions = table("user_sessions", {
-  user_id: integer("user_id").primaryKey(),
+export const userSessions = table("user_sessions", {
+  userId: integer("user_id").primaryKey(),
   state: text("state").notNull(),
   step: text("step").notNull(),
   payload: text("payload"),
-  updated_at: integer("updated_at").notNull()
+  updatedAt: integer("updated_at", { mode: "timestamp" }).notNull().default(sql`(unixepoch())`),
 });
 
 export const members = table("members", {
-  user_id: integer("user_id").primaryKey(),
+  userId: integer("user_id").primaryKey(),
   name: text("name").notNull(),
   email: text("email").notNull(),
-  created_at: integer("created_at").notNull()
+  createdAt: integer("created_at", { mode: "timestamp" }).notNull().default(sql`(unixepoch())`),
 });

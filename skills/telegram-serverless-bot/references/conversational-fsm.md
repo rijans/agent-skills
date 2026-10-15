@@ -1,24 +1,31 @@
 # Conversational FSM and Multi-Step Dialogs
 
-Because Telegram Serverless executes in stateless V8 isolates that spin up and down on demand, in-memory state (`let userState = {}`) will be lost between webhook events.
+Because Telegram Serverless executes in stateless V8 isolates that spin up and down on demand, in-memory state (`let userState = {}`) is lost between webhook events.
 
-Multi-step conversational wizards (registration forms, surveys, booking flows, checkout steps) must persist state in the built-in SQLite database (`sdk/db`).
+Multi-step conversational wizards (registration forms, surveys, booking flows, checkout steps) must persist state in the built-in SQLite database using the query builder (`db` from `sdk`, schema from `sdk/db`).
 
 ---
 
-## 1. Standard SQLite Session Schema
+## 1. Standard SQLite Session Schema (`tgcloud/schema.js`)
 
-Define a clean session table in `tgcloud/schema.js`:
+Define a session table in `tgcloud/schema.js`:
 
 ```javascript
-import { table, integer, text } from "sdk/db";
+import { table, integer, text, sql } from "sdk/db";
 
-export const user_sessions = table("user_sessions", {
-  user_id: integer("user_id").primaryKey(),
+export const userSessions = table("user_sessions", {
+  userId: integer("user_id").primaryKey(),
   state: text("state").notNull(),            // e.g. "onboarding", "booking", "feedback"
-  step: text("step").notNull(),              // e.g. "awaiting_name", "awaiting_date"
+  step: text("step").notNull(),              // e.g. "ask_name", "ask_email"
   payload: text("payload"),                  // JSON string with collected intermediate data
-  updated_at: integer("updated_at").notNull() // Unix timestamp in seconds
+  updatedAt: integer("updated_at", { mode: "timestamp" }).notNull().default(sql`(unixepoch())`),
+});
+
+export const members = table("members", {
+  userId: integer("user_id").primaryKey(),
+  name: text("name").notNull(),
+  email: text("email").notNull(),
+  createdAt: integer("created_at", { mode: "timestamp" }).notNull().default(sql`(unixepoch())`),
 });
 ```
 
@@ -26,23 +33,29 @@ export const user_sessions = table("user_sessions", {
 
 ## 2. Reusable Session Helpers (`tgcloud/lib/session.js`)
 
+All queries are asynchronous and must be `await`ed:
+
 ```javascript
-import db from "sdk/db";
+import { db } from "sdk";
+import { eq } from "sdk/db";
+import { userSessions } from "../schema.js";
 
 const SESSION_TTL_SECONDS = 3600; // 1 hour expiration
 
-export function getSession(userId) {
-  const row = db.query(
-    "SELECT state, step, payload, updated_at FROM user_sessions WHERE user_id = ?",
-    [userId]
-  )[0];
+export async function getSession(userId) {
+  const row = await db.select()
+    .from(userSessions)
+    .where(eq(userSessions.userId, userId))
+    .get();
 
   if (!row) return null;
 
   // Check TTL
   const now = Math.floor(Date.now() / 1000);
-  if (now - row.updated_at > SESSION_TTL_SECONDS) {
-    clearSession(userId);
+  const updatedUnix = row.updatedAt instanceof Date ? Math.floor(row.updatedAt.getTime() / 1000) : Number(row.updatedAt);
+
+  if (now - updatedUnix > SESSION_TTL_SECONDS) {
+    await clearSession(userId);
     return null;
   }
 
@@ -58,93 +71,133 @@ export function getSession(userId) {
   };
 }
 
-export function setSession(userId, state, step, data = {}) {
-  const now = Math.floor(Date.now() / 1000);
+export async function setSession(userId, state, step, data = {}) {
   const payloadStr = JSON.stringify(data);
 
-  db.query(
-    `INSERT INTO user_sessions (user_id, state, step, payload, updated_at)
-     VALUES (?, ?, ?, ?, ?)
-     ON CONFLICT(user_id) DO UPDATE SET
-       state = excluded.state,
-       step = excluded.step,
-       payload = excluded.payload,
-       updated_at = excluded.updated_at`,
-    [userId, state, step, payloadStr, now]
-  );
+  await db.insert(userSessions)
+    .values({
+      userId,
+      state,
+      step,
+      payload: payloadStr,
+      updatedAt: new Date(),
+    })
+    .onConflictDoUpdate({
+      target: userSessions.userId,
+      set: {
+        state,
+        step,
+        payload: payloadStr,
+        updatedAt: new Date(),
+      },
+    })
+    .run();
 }
 
-export function clearSession(userId) {
-  db.query("DELETE FROM user_sessions WHERE user_id = ?", [userId]);
+export async function clearSession(userId) {
+  await db.delete(userSessions)
+    .where(eq(userSessions.userId, userId))
+    .run();
 }
 ```
 
 ---
 
-## 3. Implementing a 3-Step Registration Wizard
+## 3. Implementing a 2-Step Registration Wizard (`handlers/message.js`)
 
 ### Step Transitions
-1. `REGISTER_AWAITING_NAME`
-2. `REGISTER_AWAITING_EMAIL`
-3. Completed -> Saved to main `users` table -> Session cleared.
+1. `ask_name`: Collect full name
+2. `ask_email`: Collect email -> Validate format -> Insert into `members` -> Clear session.
 
 ### Handler Implementation
 
 ```javascript
-import api from "sdk/api";
-import db from "sdk/db";
+// tgcloud/handlers/message.js
+import { api, db } from "sdk";
 import { getSession, setSession, clearSession } from "../lib/session.js";
+import { members } from "../schema.js";
 
-export async function handleWizardText(msg) {
-  const userId = msg.from.id;
-  const chatId = msg.chat.id;
-  const text = (msg.text || "").trim();
+export default async function (message, ctx) {
+  if (typeof message.text !== "string" || !message.from) return;
 
-  // Allow the user to cancel at any time
+  const userId = message.from.id;
+  const chatId = message.chat.id;
+  const text = message.text.trim();
+
+  // 1. Allow the user to cancel at any time
   if (text === "/cancel" || text.toLowerCase() === "cancel") {
-    clearSession(userId);
-    return api.sendMessage(chatId, "❌ Wizard cancelled. Type /register to start over.");
+    await clearSession(userId);
+    return api.sendMessage({
+      chat_id: chatId,
+      text: "❌ Wizard cancelled. Type /join to start onboarding."
+    });
   }
 
-  const session = getSession(userId);
-  if (!session || session.state !== "registration") return false;
+  // 2. Start command
+  if (text === "/join" || text === "/start") {
+    await setSession(userId, "onboarding", "ask_name", {});
+    return api.sendMessage({
+      chat_id: chatId,
+      text: "👋 Welcome to onboarding!\nWhat is your full name? (Send /cancel to abort)"
+    });
+  }
+
+  // 3. Check active conversational state
+  const session = await getSession(userId);
+  if (!session || session.state !== "onboarding") {
+    return api.sendMessage({
+      chat_id: chatId,
+      text: "Type /join to register or /help for commands."
+    });
+  }
 
   // Step 1: Handling Name
-  if (session.step === "awaiting_name") {
-    if (text.length < 2 || text.length > 50) {
-      return api.sendMessage(chatId, "⚠️ Please enter a valid name (2-50 characters):");
+  if (session.step === "ask_name") {
+    if (text.length < 2 || text.length > 40) {
+      return api.sendMessage({
+        chat_id: chatId,
+        text: "⚠️ Please enter a valid name (2-40 characters):"
+      });
     }
 
-    setSession(userId, "registration", "awaiting_email", { name: text });
-    return api.sendMessage(chatId, `Thanks, ${text}! Now please enter your email address:`);
+    await setSession(userId, "onboarding", "ask_email", { name: text });
+    return api.sendMessage({
+      chat_id: chatId,
+      text: `Nice to meet you, ${text}!\nNow please enter your email address:`
+    });
   }
 
   // Step 2: Handling Email
-  if (session.step === "awaiting_email") {
+  if (session.step === "ask_email") {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(text)) {
-      return api.sendMessage(chatId, "⚠️ Invalid email format. Please enter a valid email address (or /cancel):");
+      return api.sendMessage({
+        chat_id: chatId,
+        text: "⚠️ Invalid email format. Please enter a valid email address (e.g. user@example.com):"
+      });
     }
 
     const { name } = session.data;
 
     // Save final record to SQLite
-    db.query(
-      "INSERT INTO registered_users (user_id, name, email, created_at) VALUES (?, ?, ?, ?)",
-      [userId, name, text, Math.floor(Date.now() / 1000)]
-    );
+    await db.insert(members)
+      .values({
+        userId,
+        name,
+        email: text,
+      })
+      .onConflictDoNothing()
+      .run();
 
     // Clear ephemeral session
-    clearSession(userId);
+    await clearSession(userId);
 
-    return api.sendMessage(
-      chatId,
-      `🎉 **Registration Complete!**\n\nName: ${name}\nEmail: ${text}`,
-      { parse_mode: "Markdown" }
-    );
+    return api.sendMessage({
+      chat_id: chatId,
+      text: `🎉 **Registration Complete!**\n\nName: ${name}\nEmail: \`${text}\``,
+      parse_mode: "Markdown"
+    });
   }
-
-  return false;
 }
 ```
 
@@ -152,6 +205,6 @@ export async function handleWizardText(msg) {
 
 ## 4. Best Practices for Serverless FSMs
 
-1. **Always Offer a `/cancel` Option**: Users can get stuck in a state if they enter bad inputs or change their mind. Always check for `/cancel` at the top of the message dispatcher.
+1. **Always Offer a `/cancel` Option**: Users can get stuck in a state if they enter bad inputs or change their mind. Always check for `/cancel` at the top of the message handler.
 2. **Include Timestamps & TTLs**: Old abandoned sessions should expire automatically after a set period (e.g. 1 hour) so users aren't trapped in a step weeks later.
-3. **Use Reply Keyboard with Cancel**: When asking for freeform text, attach a single-button reply keyboard `[[ { text: "❌ Cancel" } ]]` to make exiting intuitive on mobile.
+3. **Atomic Upserts**: Use `.onConflictDoUpdate({ target: userSessions.userId, set: ... })` to prevent duplicate primary key crashes during concurrent messages.
