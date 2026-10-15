@@ -18,6 +18,13 @@
       ]
     },
     {
+      "title": "Security & Identity",
+      "description": "Deploy self-hosted OAuth2 and OIDC authentication servers with OpenAuth, typed subjects, PasswordUI/CodeUI, and cross-framework verification.",
+      "skills": [
+        "openauth"
+      ]
+    },
+    {
       "title": "Writing & Editorial",
       "description": "Write and rewrite natural, specific, human-sounding prose while preserving voice, meaning, nuance, and facts.",
       "skills": [

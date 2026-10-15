@@ -17,6 +17,7 @@ Skills in this repository are designed to be useful across tools that support th
 | [humanize-text](skills/humanize-text/) | Write and rewrite natural, specific, human-sounding prose while preserving voice, meaning, nuance, and facts. |
 | [use-telegram-serverless](skills/use-telegram-serverless/) | Build, ship, and scale simple or full-stack Telegram bots and Mini Apps directly inside Telegram's cloud—powered by V8 JavaScript isolates, built-in SQLite (`sdk/db`), native Bot API & HTTP (`sdk/api`, `sdk/fetch`), static hosting, and `tgcloud`. |
 | [telegram-serverless-bot](skills/telegram-serverless-bot/) | Build, ship, and test Telegram bots on Telegram Serverless with V8 JS, SQLite sessions (`sdk/db`), interactive keyboards, and Telegram Stars (`XTR`). |
+| [openauth](skills/openauth/) | Deploy self-hosted OAuth2 and OIDC servers with OpenAuth, createSubjects schemas, prebuilt PasswordUI and CodeUI, and cross-framework client verification. |
 | [discord-activities](skills/discord-activities/) | Build, ship, and test Discord Activities with @discord/embedded-app-sdk, OAuth2 token exchange, /.proxy/ CSP routing, and voice channel presence. |
 
 ## Install
@@ -32,6 +33,7 @@ npx skills add rijans/agent-skills
 Or install a specific skill:
 
 ```bash
+npx skills add rijans/agent-skills --skill openauth
 npx skills add rijans/agent-skills --skill discord-activities
 npx skills add rijans/agent-skills --skill telegram-serverless-bot
 npx skills add rijans/agent-skills --skill use-telegram-serverless
@@ -44,6 +46,7 @@ Register this repository as a Claude Code plugin marketplace and install skills 
 
 ```text
 /plugin marketplace add rijans/agent-skills
+/plugin install openauth@rijans-agent-skills
 /plugin install discord-activities@rijans-agent-skills
 /plugin install telegram-serverless-bot@rijans-agent-skills
 /plugin install use-telegram-serverless@rijans-agent-skills
@@ -69,6 +72,17 @@ skills/
 │       ├── multiplayer-sync.md
 │       ├── monetization-skus.md
 │       ├── local-dev-and-tunnels.md
+│       └── sources.md
+├── openauth/
+│   ├── SKILL.md
+│   ├── eval.md
+│   ├── agents/
+│   │   └── openai.yaml
+│   └── references/
+│       ├── issuer-and-subjects.md
+│       ├── providers-and-ui.md
+│       ├── client-and-session.md
+│       ├── storage-and-deployment.md
 │       └── sources.md
 ├── humanize-text/
 │   ├── SKILL.md
@@ -147,6 +161,18 @@ Build, ship, and test rich, interactive web applications directly inside Discord
 - **Hybrid Local Development**: Rapid browser UI mock mode paired with Cloudflare Tunnel (`cloudflared`) for live in-client testing.
 
 See [the skill](skills/discord-activities/SKILL.md) and its [examples](examples/discord-activities/) for details.
+
+## OpenAuth
+
+Deploy self-hosted OAuth 2.0 and OIDC authentication servers across Cloudflare Workers, Node.js, Bun, and AWS Lambda—powered by [`@openauthjs/openauth`](https://openauth.js.org):
+
+- **Typed Subjects Schema**: Standard Schema definitions via `createSubjects` (compatible with Valibot and Zod v3.24+) for end-to-end type safety across tokens and user sessions.
+- **Prebuilt UI Components**: Ready-to-use passwordless PIN/OTP email verification (`CodeUI` / `CodeProvider`) and username/password registration with reset flows (`PasswordUI` / `PasswordProvider`).
+- **Social & Enterprise Providers**: Drop-in adapters for GitHub, Google, Discord, Apple, and generic OIDC providers with automated multi-provider login screens.
+- **Client Verification & Token Refresh**: Universal client SDK (`createClient`, `authorize`, `exchange`, `verify`) with automatic token rotation and HTTP-only cookie persistence.
+- **Multi-Cloud Storage & Serverless Adapters**: Global edge persistence with `CloudflareStorage` (KV), AWS deployments with `DynamoStorage`, and zero-config local testing with `MemoryStorage`.
+
+See [the skill](skills/openauth/SKILL.md) and its [examples](examples/openauth/) for details.
 
 ## Adding a skill
 

@@ -1,0 +1,5 @@
+interface:
+  display_name: "OpenAuth"
+  short_description: "Deploy self-hosted OAuth2/OIDC auth servers with @openauthjs/openauth, PasswordUI, CodeUI, and cross-framework verification"
+  default_prompt: |
+    Use OpenAuth to build, configure, deploy, or verify this self-hosted OAuth2/OIDC authentication server, subjects schema, social provider, or client session task.

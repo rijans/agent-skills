@@ -1,0 +1,14 @@
+{
+  "name": "openauth-basic-issuer-example",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "dependencies": {
+    "@openauthjs/openauth": "^0.3.0",
+    "@hono/node-server": "^1.13.0",
+    "valibot": "^1.0.0"
+  }
+}

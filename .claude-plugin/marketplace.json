@@ -37,6 +37,15 @@
       ]
     },
     {
+      "name": "openauth",
+      "description": "Deploy self-hosted OAuth2 and OIDC servers with OpenAuth, createSubjects schemas, prebuilt PasswordUI and CodeUI, and cross-framework client verification.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/openauth"
+      ]
+    },
+    {
       "name": "humanize-text",
       "description": "Write and rewrite natural, specific, human-sounding prose while preserving voice, meaning, nuance, and facts.",
       "source": "./",
